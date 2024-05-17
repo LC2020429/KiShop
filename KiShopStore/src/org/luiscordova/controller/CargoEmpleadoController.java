@@ -131,6 +131,7 @@ public class CargoEmpleadoController  implements Initializable{
                 btnEditar.setDisable(false);
                 btnReporte.setDisable(false);
                 tipoDeOperaciones = operaciones.NINGUNO;
+                cargarDatos();
                 break;
         }
     }
@@ -142,7 +143,7 @@ public class CargoEmpleadoController  implements Initializable{
         registro.setDescripcionCargo(txtDescripcionCargoEmpleado.getText());
         try {
             // se usa procedimiento por ser local y solo permite una conexion
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call CargoEmpleadoController(?, ?, ?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_AgregarCargoEmpleado(?, ?, ?)}");
             procedimiento.setInt(1, registro.getCodigoCargoEmpleado());
             procedimiento.setString(2, registro.getNombreCargo());
             procedimiento.setString(3, registro.getDescripcionCargo());
@@ -169,7 +170,7 @@ public class CargoEmpleadoController  implements Initializable{
                     int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar CargoEmpleado", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
                         try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCliente(?)}");
+                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCargoEmpleado(?)}");
                             procedimiento.setInt(1, ((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
                             procedimiento.execute();
                             listaCargoEmpleado.remove(tvCompras.getSelectionModel().getSelectedItem());
@@ -217,7 +218,7 @@ public class CargoEmpleadoController  implements Initializable{
 
     public void actualizar() {
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call CargoEmpleadoController (?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCargoEmpleado (?,?,?)}");
             CargoEmpleado registro = (CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem();
             
             registro.setNombreCargo(txtNombreCargoEmpleado.getText());

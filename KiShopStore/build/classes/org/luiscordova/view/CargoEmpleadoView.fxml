@@ -20,7 +20,7 @@
             <Image url="@../resource/CargoEmpleado.jpg" />
          </image>
       </ImageView>
-      <TableView fx:id="tvCompras" layoutX="401.0" layoutY="250.0" onMouseClicked="#seleccionarElemento" prefHeight="304.0" prefWidth="597.0" stylesheets="@../resource/KiShopCSS.css">
+      <TableView fx:id="tvCompras" layoutX="401.0" layoutY="250.0" onMouseClicked="#seleccionarElmento" prefHeight="304.0" prefWidth="597.0" stylesheets="@../resource/KiShopCSS.css">
          <columns>
             <TableColumn fx:id="ColCodigoCargoEmpleado" minWidth="142.0" prefWidth="142.0" text="Codigo" />
             <TableColumn fx:id="colNombreCargo" minWidth="199.0" prefWidth="209.0" text="Nombre" />

@@ -16,6 +16,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.luiscordova.controller.ProductosController">
    <children>
+      <Button fx:id="btnEliminar1" layoutX="272.0" layoutY="134.0" mnemonicParsing="false" onAction="#eliminar" prefHeight="98.0" prefWidth="108.0" style="-fx-background-color: #FFF8ED;" text="Agregar">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
       <ImageView fitHeight="575.0" fitWidth="1024.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resource/Producto.jpg" />
@@ -105,11 +110,6 @@
             </Label>
          </children>
       </GridPane>
-      <Button fx:id="btnAgregar" layoutX="272.0" layoutY="132.0" mnemonicParsing="false" onAction="#agregar" prefHeight="105.0" prefWidth="108.0" style="-fx-background-color: #96EA9A;" text="Agregar">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
       <Button fx:id="btnEliminar" layoutX="272.0" layoutY="250.0" mnemonicParsing="false" onAction="#eliminar" prefHeight="98.0" prefWidth="108.0" style="-fx-background-color: #FFF8ED;" text="Eliminar">
          <font>
             <Font size="20.0" />
@@ -128,6 +128,11 @@
       <Button fx:id="btnRegresar" layoutX="48.0" layoutY="541.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="33.0" prefWidth="159.0" style="-fx-background-color: #FFBA14;" text="Regresar">
          <font>
             <Font size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnAgregar" layoutX="272.0" layoutY="132.0" mnemonicParsing="false" onAction="#agregar" prefHeight="105.0" prefWidth="108.0" style="-fx-background-color: #96EA9A;" text="Agregar">
+         <font>
+            <Font size="20.0" />
          </font>
       </Button>
    </children>

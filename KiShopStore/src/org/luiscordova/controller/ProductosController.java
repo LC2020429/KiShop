@@ -24,6 +24,24 @@ import org.luiscordova.dao.Conexion;
 import org.luiscordova.system.Main;
 
 public class ProductosController implements Initializable {
+     private Main escenarioPrincipal;
+    private ObservableList<Productos> listaProductos;
+    private ObservableList<Proveedores> listaProveedores;
+    private ObservableList<TipoProducto> listaTipoProducto;
+
+    private enum operador {
+        AGREGRAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
+    }
+    private operador tipoDeOperador = operador.NINGUNO;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        cargarDatos();
+        cmbCodigoTipoP.setItems(getTipoProducto());
+        cmbCodigoProveedor.setItems(getProveedores());
+        desactivarControles();
+    }
 
     @FXML
     private TableView tvProducto;
@@ -96,25 +114,6 @@ public class ProductosController implements Initializable {
 
     @FXML
     private Button btnRegresar;
-
-    private Main escenarioPrincipal;
-    private ObservableList<Productos> listaProductos;
-    private ObservableList<Proveedores> listaProveedores;
-    private ObservableList<TipoProducto> listaTipoProducto;
-
-    private enum operador {
-        AGREGRAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
-    }
-    private operador tipoDeOperador = operador.NINGUNO;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        cargarDatos();
-        cmbCodigoTipoP.setItems(getTipoProducto());
-        cmbCodigoProveedor.setItems(getProveedores());
-        desactivarControles();
-    }
 
     public void cargarDatos() {
         tvProducto.setItems(getProducto());
@@ -196,7 +195,7 @@ public class ProductosController implements Initializable {
     public ObservableList<Productos> getProducto() {
         ArrayList<Productos> listaP = new ArrayList<>();
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarProductos()}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarProductos()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 listaP.add(new Productos(resultado.getString("codigoProducto"),
@@ -256,67 +255,9 @@ public class ProductosController implements Initializable {
         return listaTipoProducto = FXCollections.observableList(lista);
     }
 
-    public void desactivarControles() {
-        txtCodigoProducto.setEditable(false);
-        txtDescripcion.setEditable(false);
-        txtExisistencia.setEditable(false);
-        txtImagen.setEditable(false);
-        txtPrecioDoce.setEditable(false);
-        txtPrecioMayor.setEditable(false);
-        txtPrecioU.setEditable(false);
-        cmbCodigoTipoP.setDisable(true);
-        cmbCodigoProveedor.setDisable(true);
-    }
-
-    public void activarControles() {
-        txtCodigoProducto.setEditable(true);
-        txtDescripcion.setEditable(true);
-        txtExisistencia.setEditable(true);
-        txtImagen.setEditable(true);
-        txtPrecioDoce.setEditable(true);
-        txtPrecioMayor.setEditable(true);
-        txtPrecioU.setEditable(true);
-        cmbCodigoTipoP.setDisable(false);
-        cmbCodigoProveedor.setDisable(false);
-    }
-
-    public void limpiarControles() {
-        txtCodigoProducto.clear();
-        txtDescripcion.clear();
-        txtExisistencia.clear();
-        txtImagen.clear();
-        txtPrecioDoce.clear();
-        txtPrecioMayor.clear();
-        txtPrecioU.clear();
-        tvProducto.getSelectionModel().getSelectedItem();
-        cmbCodigoTipoP.getSelectionModel().getSelectedItem();
-        cmbCodigoProveedor.getSelectionModel().getSelectedItem();
-
-    }
-    public void MenuPrincipalView() {
-        escenarioPrincipal.menuPrincipalView();
-    }
-
-    @FXML
-    public void handleButtonAction(ActionEvent event) {
-        if (event.getSource() == btnRegresar) {
-            escenarioPrincipal.menuPrincipalView();
-        }
-
-    }
-
-    public Main getEscenarioPrincipal() {
-        return escenarioPrincipal;
-    }
-
-    public void setEscenarioPrincipal(Main escenarioPrincipal) {
-        this.escenarioPrincipal = escenarioPrincipal;
-    }
-
     private void agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
-                limpiarControles();
                 activarControles();
                 btnAgregar.setText("Guardar");
                 btnEliminar.setText("Cancelar");
@@ -328,7 +269,6 @@ public class ProductosController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
-                cargarDatos();
                 desactivarControles();
                 btnAgregar.setText("Agregar");
                 btnEliminar.setText("Eliminar");
@@ -341,7 +281,6 @@ public class ProductosController implements Initializable {
                 break;
         }
     }
-
     public void guardar() {
         Productos registro = new Productos();
         registro.setCodigoProducto(txtCodigoProducto.getText());
@@ -386,7 +325,8 @@ public class ProductosController implements Initializable {
                 break;
             default:
                 if (tvProducto.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Producto???", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Producto???", 
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
                         try {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarProducto(?)}");
@@ -465,5 +405,64 @@ public class ProductosController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    public void desactivarControles() {
+        txtCodigoProducto.setEditable(false);
+        txtDescripcion.setEditable(false);
+        txtExisistencia.setEditable(false);
+        txtImagen.setEditable(false);
+        txtPrecioDoce.setEditable(false);
+        txtPrecioMayor.setEditable(false);
+        txtPrecioU.setEditable(false);
+        cmbCodigoTipoP.setDisable(true);
+        cmbCodigoProveedor.setDisable(true);
+    }
+
+    public void activarControles() {
+        txtCodigoProducto.setEditable(true);
+        txtDescripcion.setEditable(true);
+        txtExisistencia.setEditable(true);
+        txtImagen.setEditable(true);
+        txtPrecioDoce.setEditable(true);
+        txtPrecioMayor.setEditable(true);
+        txtPrecioU.setEditable(true);
+        cmbCodigoTipoP.setDisable(false);
+        cmbCodigoProveedor.setDisable(false);
+    }
+
+    public void limpiarControles() {
+        txtCodigoProducto.clear();
+        txtDescripcion.clear();
+        txtExisistencia.clear();
+        txtImagen.clear();
+        txtPrecioDoce.clear();
+        txtPrecioMayor.clear();
+        txtPrecioU.clear();
+        tvProducto.getSelectionModel().getSelectedItem();
+        cmbCodigoTipoP.getSelectionModel().getSelectedItem();
+        cmbCodigoProveedor.getSelectionModel().getSelectedItem();
+
+    }
+    public void MenuPrincipalView() {
+        escenarioPrincipal.menuPrincipalView();
+    }
+
+    @FXML
+    public void handleButtonAction(ActionEvent event) {
+        if (event.getSource() == btnRegresar) {
+            escenarioPrincipal.menuPrincipalView();
+        }
+
+    }
+
+    public Main getEscenarioPrincipal() {
+        return escenarioPrincipal;
+    }
+
+    public void setEscenarioPrincipal(Main escenarioPrincipal) {
+        this.escenarioPrincipal = escenarioPrincipal;
+    }
+
+
 
 }

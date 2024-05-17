@@ -118,7 +118,7 @@ public class Main extends Application {
 
     public void programadorView() {
         try {
-            ProgramadorViewController prograView = (ProgramadorViewController) cambiarEscena("ProgramadorView.fxml", 1024, 768);
+            ProgramadorViewController prograView = (ProgramadorViewController) cambiarEscena("ProgramadorView.fxml", 1020, 572);
             prograView.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
@@ -129,7 +129,7 @@ public class Main extends Application {
 
     public void ProductoView() {
         try {
-            ProductosController ProductoVista = (ProductosController) cambiarEscena("ProductoVista.fxml", 1024, 768);
+            ProductosController ProductoVista = (ProductosController) cambiarEscena("ProductoVista.fxml", 1020, 575);
             ProductoVista.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
