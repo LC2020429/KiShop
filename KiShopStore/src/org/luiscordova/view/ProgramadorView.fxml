@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.luiscordova.controller.ProgramadorViewController">
+   <children>
+      <ImageView fitHeight="768.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/Programador.png" />
+         </image>
+      </ImageView>
+      <TextArea layoutX="580.0" layoutY="265.0" prefHeight="142.0" prefWidth="373.0" text="Nombre: Luis Rafael Cordova Ruiz&#10;Fecha Nacimiento: 27/03/2007&#10;Carnet: 2020429&#10;Codigo Tecnico: IN5BM">
+         <font>
+            <Font size="20.0" />
+         </font></TextArea>
+      <ImageView fitHeight="324.0" fitWidth="179.0" layoutX="207.0" layoutY="273.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/Foto.PNG" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnRegresar" layoutX="827.0" layoutY="653.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="113.0" prefWidth="196.0" style="-fx-background-color: #5B88A5;" text="Regresar" textFill="WHITE">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Button>
+      <TextArea layoutX="580.0" layoutY="435.0" prefHeight="202.0" prefWidth="390.0" text="Yo me decidi por estudiar programacion &#10;para crear aplicaciones que me faciliten&#10;a mi las tareas y tareas de los demás, el &#10;ambito de la ciberseguridad las meneras&#10;de protegerse, atacar, etc. Es un mundo &#10;nuevo y me abruma pero hay que seguir.">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextArea>
+   </children>
+</AnchorPane>
