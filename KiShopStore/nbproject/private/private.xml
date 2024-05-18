@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/CargoEmpleadoController.java</file>
-            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/view/ProductoVista.fxml</file>
-            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/view/CargoEmpleadoView.fxml</file>
-            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/ProductosController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/system/Main.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/ProductosTiendaController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/bean/Proveedores.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/bean/TipoProducto.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/bean/ProductoTienda.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,96 +1,160 @@
-drop database if exists DBKiShop;
-create database DBKiShop;
-use DBKiShop;
-set global time_zone = '-06:00';
+DROP DATABASE IF EXISTS DBKiShop;
+CREATE DATABASE DBKiShop;
+USE DBKiShop;
+SET GLOBAL time_zone = '-06:00';
 
-
-create table TipoProducto(
-codigoTipoProducto int,
-descripcion varchar(45),
-primary key (codigoTipoProducto)
+CREATE TABLE TipoProducto (
+    codigoTipoProducto INT,
+    descripcion VARCHAR(45),
+    PRIMARY KEY (codigoTipoProducto)
 );
 
-create table Proveedores (
-codigoProveedor int,
-NITProveedor varchar(10),
-nombresProveedor varchar(60),
-apellidosProveedor varchar(60),
-direccionProveedor varchar(150),
-razonSocial varchar(60),
-contactoPrincipal varchar (100),
-paginaWeb varchar(50),
-primary key (codigoProveedor)
+CREATE TABLE Proveedores (
+    codigoProveedor INT,
+    NITProveedor VARCHAR(10),
+    nombresProveedor VARCHAR(60),
+    apellidosProveedor VARCHAR(60),
+    direccionProveedor VARCHAR(150),
+    razonSocial VARCHAR(60),
+    contactoPrincipal VARCHAR(100),
+    paginaWeb VARCHAR(50),
+    PRIMARY KEY (codigoProveedor)
 );
 
-create table Compras(
-numeroDocumento int,
-fechaDocumento Date,
-descripcion varchar(60),
-totalDocumento decimal(10,2),
-primary key (numeroDocumento)
+CREATE TABLE Compras (
+    numeroDocumento INT,
+    fechaDocumento DATE,
+    descripcion VARCHAR(60),
+    totalDocumento DECIMAL(10, 2),
+    PRIMARY KEY (numeroDocumento)
 );
 
-create table Clientes(
-codigoCliente int,
-NITCliente varchar(10),
-nombresCliente varchar(50),
-apellidosCliente varchar(50),
-direccionCliente varchar(150),
-telefonoCliente varchar(8),
-correoCliente varchar(45),
-primary key (codigoCliente)
+CREATE TABLE Clientes (
+    codigoCliente INT,
+    NITCliente VARCHAR(10),
+    nombresCliente VARCHAR(50),
+    apellidosCliente VARCHAR(50),
+    direccionCliente VARCHAR(150),
+    telefonoCliente VARCHAR(8),
+    correoCliente VARCHAR(45),
+    PRIMARY KEY (codigoCliente)
 );
 
-create table CargoEmpleado (
-codigoCargoEmpleado Int,
-nombreCargo varchar(45),
-descripcionCargo varchar(45),
-primary key (codigoCargoEmpleado)
+CREATE TABLE CargoEmpleado (
+    codigoCargoEmpleado INT,
+    nombreCargo VARCHAR(45),
+    descripcionCargo VARCHAR(45),
+    PRIMARY KEY (codigoCargoEmpleado)
 );
 
-create table Productos(
-codigoProducto varchar(15),
-descripcionProducto varchar(45),
-precioUnitario decimal (10,2),
-precioDocena decimal (10,2),
-precioMayor decimal (10,2),
-imagenProducto varchar(45),
-existencia int,
-codigoTipoProducto int,
-codigoProveedor int,
-primary key (codigoProducto),
-foreign key (codigoTipoProducto)
-references TipoProducto(codigoTipoProducto),
-foreign key (codigoProveedor)
-references Proveedores(codigoProveedor)
+CREATE TABLE Productos (
+    codigoProducto VARCHAR(15),
+    descripcionProducto VARCHAR(45),
+    precioUnitario DECIMAL(10, 2),
+    precioDocena DECIMAL(10, 2),
+    precioMayor DECIMAL(10, 2),
+    imagenProducto VARCHAR(45),
+    existencia INT,
+    codigoTipoProducto INT,
+    codigoProveedor INT,
+    PRIMARY KEY (codigoProducto),
+    FOREIGN KEY (codigoTipoProducto) REFERENCES TipoProducto(codigoTipoProducto),
+    FOREIGN KEY (codigoProveedor) REFERENCES Proveedores(codigoProveedor)
 );
 
-create table TelefonoProveedro(
-codigoTelefonoProveedor int,
-numeroPrincipal varchar(8),
-numeroSecundario varchar(8),
-observaciones varchar(45),
-
-codigoProveedor int,
-primary key (codigoTelefonoProveedor),
-foreign key (codigoProveedor)
-references Proveedores(codigoProveedor)
+CREATE TABLE TelefonoProveedor (
+    codigoTelefonoProveedor INT,
+    numeroPrincipal VARCHAR(8),
+    numeroSecundario VARCHAR(8),
+    observaciones VARCHAR(45),
+    codigoProveedor INT,
+    PRIMARY KEY (codigoTelefonoProveedor),
+    FOREIGN KEY (codigoProveedor) REFERENCES Proveedores(codigoProveedor)
 );
 
-create table DetalleCompra(
-codigoDetalleCompra int,
-constoUnitario decimal (10,2),
-cantidad int,
-
-codigoProducto varchar(15),
-numeroDocumento int,
-primary key (codigoDetalleCompra),
-foreign key (codigoProducto)
-references Productos(codigoProducto),
-foreign key (numeroDocumento)
-references Compras(numeroDocumento)
+CREATE TABLE DetalleCompra (
+    codigoDetalleCompra INT,
+    costoUnitario DECIMAL(10, 2),
+    cantidad INT,
+    codigoProducto VARCHAR(15),
+    numeroDocumento INT,
+    PRIMARY KEY (codigoDetalleCompra),
+    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto),
+    FOREIGN KEY (numeroDocumento) REFERENCES Compras(numeroDocumento)
 );
 
+CREATE TABLE Empleados (
+    codigoEmpleado INT,
+    nombresEmpleado VARCHAR(50),
+    apellidosEmpleado VARCHAR(50),
+    sueldo DECIMAL(10, 2),
+    direccion VARCHAR(150),
+    turno VARCHAR(15),
+    codigoCargoEmpleado INT,
+    PRIMARY KEY (codigoEmpleado),
+    FOREIGN KEY (codigoCargoEmpleado) REFERENCES CargoEmpleado(codigoCargoEmpleado)
+);
 
+CREATE TABLE Factura (
+    numeroFactura INT,
+    estado VARCHAR(50),
+    totalFactura DECIMAL(10, 2),
+    fechaFactura VARCHAR(45),
+    codigoCliente INT,
+    codigoEmpleado INT,
+    PRIMARY KEY (numeroFactura),
+    FOREIGN KEY (codigoCliente) REFERENCES Clientes(codigoCliente),
+    FOREIGN KEY (codigoEmpleado) REFERENCES Empleados(codigoEmpleado)
+);
 
+CREATE TABLE DetalleFactura (
+    codigoDetalleFactura INT,
+    precioUnitario DECIMAL(10, 2),
+    cantidad INT,
+    numeroFactura INT,
+    codigoProducto VARCHAR(15),
+    PRIMARY KEY (codigoDetalleFactura),
+    FOREIGN KEY (numeroFactura) REFERENCES Factura(numeroFactura),
+    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto)
+);
 
+DELIMITER $$
+CREATE TRIGGER CalculoPrecios
+AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Productos
+    SET precioUnitario = 0.00,
+        precioDocena = 0.00,
+        precioMayor = 0.00
+    WHERE codigoProducto = (SELECT codigoProducto FROM Compras WHERE numeroDocumento = NEW.numeroDocumento);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER ActualizarExistencia
+AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Productos
+    SET existencia = existencia + NEW.cantidad
+    WHERE codigoProducto = NEW.codigoProducto;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER AplicarGanancia
+AFTER UPDATE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+    
+    SET total = NEW.costoUnitario * NEW.cantidad;
+
+    UPDATE Productos
+    SET precioUnitario = total * 1.4,
+        precioDocena = total * 1.35 / 12,
+        precioMayor = total * 1.25 / 20
+    WHERE codigoProducto = NEW.codigoProducto;
+END $$
+DELIMITER ;
