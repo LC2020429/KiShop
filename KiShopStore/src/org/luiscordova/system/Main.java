@@ -18,7 +18,7 @@ import org.luiscordova.controller.CargoEmpleadoController;
 import org.luiscordova.controller.ClienteVistaController;
 import org.luiscordova.controller.CompraVistaController;
 import org.luiscordova.controller.MenuPrincipalController;
-import org.luiscordova.controller.ProductosController;
+import org.luiscordova.controller.ProductosTiendaController;
 import org.luiscordova.controller.ProgramadorViewController;
 import org.luiscordova.controller.ProveedorVistaController;
 import org.luiscordova.controller.TipoProductoVistaController;
@@ -129,7 +129,7 @@ public class Main extends Application {
 
     public void ProductoView() {
         try {
-            ProductosController ProductoVista = (ProductosController) cambiarEscena("ProductoVista.fxml", 1020, 575);
+            ProductosTiendaController ProductoVista = (ProductosTiendaController) cambiarEscena("ProductoTiendaVista.fxml", 1200, 675);
             ProductoVista.setEscenarioPrincipal(this);
 
         } catch (Exception e) {

@@ -1,6 +1,14 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package org.luiscordova.bean;
 
-public class Productos {
+/**
+ *
+ * @author Computadora
+ */
+public class ProductoTienda {
 
     private String codigoProducto;
     private String descripcionProducto;
@@ -12,10 +20,11 @@ public class Productos {
     private int codigoTipoProducto;
     private int codigoProveedor;
 
-    public Productos() {
+    public ProductoTienda() {
     }
 
-    public Productos(String codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, String imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
+    public ProductoTienda(String codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena
+            , double precioMayor, String imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
         this.codigoProducto = codigoProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioUnitario = precioUnitario;
@@ -99,5 +108,9 @@ public class Productos {
         this.codigoProveedor = codigoProveedor;
     }
     
+    @Override
+    public String toString() {
+        return getCodigoProducto() + "    |   "  + getDescripcionProducto();
+    }
     
 }
