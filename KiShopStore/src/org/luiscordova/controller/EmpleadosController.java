@@ -93,16 +93,19 @@ public class EmpleadosController implements Initializable {
     }
     private operador tipoDeOperador = operador.NINGUNO;
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarDatos();
-        cmbCodigoCargoEmpleado.setItems(getEmpleado());
+        cmbCodigoCargoEmpleado.setItems(getCargoE());
         desactivarControles();
     }
 
     public void cargarDatos() {
-        tvEmpleados.setItems(getEmpleado());
+        tvEmpleados.setItems(getEmpleados());
         colCodigoEmpleado.setCellValueFactory(new PropertyValueFactory<Empleados, Integer>("codigoEmpleado"));
         colNombresTrabajador.setCellValueFactory(new PropertyValueFactory<Empleados, String>("nombresEmpleado"));
         colApellidos.setCellValueFactory(new PropertyValueFactory<Empleados, String>("apellidosEmpleado"));
@@ -110,67 +113,69 @@ public class EmpleadosController implements Initializable {
         colDireccionEmpleado.setCellValueFactory(new PropertyValueFactory<Empleados, String>("direccion"));
         colTurno.setCellValueFactory(new PropertyValueFactory<Empleados, String>("turno"));
         colCargo.setCellValueFactory(new PropertyValueFactory<Empleados, Integer>("codigoCargoEmpleado"));
+
     }
 
     public void seleccionarElemento() {
-        txtCtxtCodigoEmpleadoodo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
-        txtNombresEmpleado.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getNombresEmpleado()));
-        txtApellidosEmpleado.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getApellidosEmpleado()));
-        txtSueldo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getSueldo()));
-        txtDireccion.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getTurno()));
-        txtTurno.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getDireccion()));        
-        cmbCodigoCargoEmpleado.getSelectionModel().select(buscarCargoEmpledo(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+        try {
+            txtCtxtCodigoEmpleadoodo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
+            txtNombresEmpleado.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getNombresEmpleado()));
+            txtApellidosEmpleado.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getApellidosEmpleado()));
+            txtSueldo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getSueldo()));
+            txtDireccion.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getDireccion()));
+            txtTurno.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getTurno()));
+            cmbCodigoCargoEmpleado.getSelectionModel().select(buscarCodigoEmp(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
-    public CargoEmpleado buscarCargoEmpledo(int codigoCargoEmpleado) {
+    public CargoEmpleado buscarCodigoEmp(int codigoEmpleado) {
         CargoEmpleado resultado = null;
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{CALL sp_BuscarCargoEmpleadoPorCodigo(?)}");
-            procedimiento.setInt(1, codigoCargoEmpleado);
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_BuscarCargoEmpleadoPorCodigo(?)}");
+            procedimiento.setInt(1, codigoEmpleado);
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
-                resultado = new CargoEmpleado(
-                        registro.getInt("codigoCargoEmpleado"),
+                resultado = new CargoEmpleado(registro.getInt("codigoCargoEmpleado"),
                         registro.getString("nombreCargo"),
                         registro.getString("descripcionCargo"));
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return resultado;
     }
 
-    public ObservableList<Empleados> getEmpleado() {
-        ArrayList<Empleados> listaE = new ArrayList<>();
+    public ObservableList<Empleados> getEmpleados() {
+        ArrayList<Empleados> listaEmp = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarEmpleados()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                listaEmpleados.add(new Empleados(
-                        resultado.getInt("codigoEmpleado"),
+                listaEmp.add(new Empleados(resultado.getInt("codigoEmpleado"),
                         resultado.getString("nombresEmpleado"),
                         resultado.getString("apellidosEmpleado"),
                         resultado.getDouble("sueldo"),
                         resultado.getString("direccion"),
-                        resultado.getString("turno"),
+                        resultado.getNString("turno"),
                         resultado.getInt("codigoCargoEmpleado")
                 ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return listaEmpleados = FXCollections.observableList(listaE);
+        return listaEmpleados = FXCollections.observableList(listaEmp);
     }
 
-    public ObservableList<CargoEmpleado> getCargoEmpleado() {
-        ArrayList<CargoEmpleado> lista = new ArrayList<>();
+    public ObservableList<CargoEmpleado> getCargoE() {
+        ArrayList<CargoEmpleado> listaCE = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarCargosEmpleado()}");
+
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                lista.add(new CargoEmpleado(resultado.getInt("codigoCargoEmpleado"),
+                listaCE.add(new CargoEmpleado(resultado.getInt("codigoCargoEmpleado"),
                         resultado.getString("nombreCargo"),
                         resultado.getString("descripcionCargo")
                 ));
@@ -179,22 +184,25 @@ public class EmpleadosController implements Initializable {
             e.printStackTrace();
         }
 
-        return listaCargoEmpleado = FXCollections.observableList(lista);
+        return listaCargoEmpleado = FXCollections.observableList(listaCE);
     }
 
     public void agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                limpiarControles();
                 activarControles();
                 btnAgregar.setText("Guardar");
                 btnEliminar.setText("Cancelar");
                 btnEditar.setDisable(true);
                 btnReportes.setDisable(true);
+                //imgAgregar.setImage(new Image("URL"));
                 tipoDeOperador = operador.ACTUALIZAR;
                 break;
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
+                cargarDatos();
                 desactivarControles();
                 btnAgregar.setText("Agregar");
                 btnEliminar.setText("Eliminar");
@@ -211,15 +219,15 @@ public class EmpleadosController implements Initializable {
     public void guardar() {
         Empleados registro = new Empleados();
         registro.setCodigoEmpleado(Integer.parseInt(txtCtxtCodigoEmpleadoodo.getText()));
-        registro.setCodigoCargoEmpleado(((CargoEmpleado) cmbCodigoCargoEmpleado.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
         registro.setNombresEmpleado(txtNombresEmpleado.getText());
         registro.setApellidosEmpleado(txtApellidosEmpleado.getText());
         registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
         registro.setDireccion(txtDireccion.getText());
         registro.setTurno(txtTurno.getText());
+        registro.setCodigoCargoEmpleado(((CargoEmpleado) cmbCodigoCargoEmpleado.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
 
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_AgregarEmpleado(?,?,?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_AgregarEmpleado(?,?,?,?,?,?,?)}");
             procedimiento.setInt(1, registro.getCodigoEmpleado());
             procedimiento.setString(2, registro.getNombresEmpleado());
             procedimiento.setString(3, registro.getApellidosEmpleado());
@@ -235,40 +243,6 @@ public class EmpleadosController implements Initializable {
         }
     }
 
-    public void eliminar() {
-        switch (tipoDeOperador) {
-            case ACTUALIZAR:
-                desactivarControles();
-                limpiarControles();
-                btnAgregar.setText("Agregar");
-                btnEliminar.setText("Eiminar");
-                btnEditar.setDisable(false);
-                btnReportes.setDisable(false);
-                tipoDeOperador = operador.NINGUNO;
-                break;
-            default:
-                if (tvEmpleados.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Empleado???",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_NO_OPTION) {
-                        try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarEmpleado(?)}");
-                            procedimiento.setInt(1, ((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
-                            procedimiento.execute();
-                            listaEmpleados.remove(tvEmpleados.getSelectionModel().getSelectedItem());
-                            limpiarControles();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Debe de seleccionar un empleado para eliminar");
-                    }
-                    break;
-                }
-        }
-    }
-
-    // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -300,17 +274,15 @@ public class EmpleadosController implements Initializable {
 
     public void actualizar() {
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarEmpleado (?,?,?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarEmpleado(?,?,?,?,?,?,?)}");
             Empleados registro = (Empleados) tvEmpleados.getSelectionModel().getSelectedItem();
-
             registro.setCodigoEmpleado(Integer.parseInt(txtCtxtCodigoEmpleadoodo.getText()));
-            registro.setCodigoCargoEmpleado(((CargoEmpleado) cmbCodigoCargoEmpleado.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
             registro.setNombresEmpleado(txtNombresEmpleado.getText());
             registro.setApellidosEmpleado(txtApellidosEmpleado.getText());
             registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
             registro.setDireccion(txtDireccion.getText());
             registro.setTurno(txtTurno.getText());
-
+            registro.setCodigoCargoEmpleado(((CargoEmpleado) cmbCodigoCargoEmpleado.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
             procedimiento.setInt(1, registro.getCodigoEmpleado());
             procedimiento.setString(2, registro.getNombresEmpleado());
             procedimiento.setString(3, registro.getApellidosEmpleado());
@@ -324,14 +296,59 @@ public class EmpleadosController implements Initializable {
         }
     }
 
-    //Control de ingreso de texto 
+           public void eliminar() {
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnAgregar.setText("Agregar");
+                btnEliminar.setText("Eiminar");
+                btnEditar.setDisable(false);
+                btnReportes.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+                break;
+            default:
+                if (tvEmpleados.getSelectionModel().getSelectedItem() != null) {
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Empleado???",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta == JOptionPane.YES_NO_OPTION) {
+                        try {
+                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarEmpleado(?)}");
+                            procedimiento.setInt(1, ((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
+                            procedimiento.execute();
+                            listaEmpleados.remove(tvEmpleados.getSelectionModel().getSelectedItem());
+                            limpiarControles();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe de seleccionar un Empleado para eliminar");
+                    }
+                    break;
+                }
+        }
+    }
+           
+    public void reporte() {
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditar.setText("Editar");
+                btnReportes.setText("Reportes");
+                btnAgregar.setDisable(false);
+                btnEliminar.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+        }
+    }
+
     public void desactivarControles() {
         txtCtxtCodigoEmpleadoodo.setEditable(false);
         txtNombresEmpleado.setEditable(false);
         txtApellidosEmpleado.setEditable(false);
         txtSueldo.setEditable(false);
-        txtTurno.setEditable(false);
         txtDireccion.setEditable(false);
+        txtTurno.setEditable(false);
         cmbCodigoCargoEmpleado.setDisable(true);
     }
 
@@ -340,8 +357,8 @@ public class EmpleadosController implements Initializable {
         txtNombresEmpleado.setEditable(true);
         txtApellidosEmpleado.setEditable(true);
         txtSueldo.setEditable(true);
-        txtTurno.setEditable(true);
         txtDireccion.setEditable(true);
+        txtTurno.setEditable(true);
         cmbCodigoCargoEmpleado.setDisable(false);
     }
 
@@ -350,23 +367,9 @@ public class EmpleadosController implements Initializable {
         txtNombresEmpleado.clear();
         txtApellidosEmpleado.clear();
         txtSueldo.clear();
-        txtTurno.clear();
         txtDireccion.clear();
-        tvEmpleados.getSelectionModel().getSelectedItem();
-        cmbCodigoCargoEmpleado.getSelectionModel().getSelectedItem();
-
-    }
-
-    public void MenuPrincipalView() {
-        escenarioPrincipal.menuPrincipalView();
-    }
-
-    @FXML
-    public void handleButtonAction(ActionEvent event) {
-        if (event.getSource() == btnRegresar) {
-            escenarioPrincipal.menuPrincipalView();
-        }
-
+        txtTurno.clear();
+        cmbCodigoCargoEmpleado.getSelectionModel().clearSelection();
     }
 
     public Main getEscenarioPrincipal() {
@@ -375,5 +378,15 @@ public class EmpleadosController implements Initializable {
 
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
+    }
+
+    public void handleButtonAction(ActionEvent event) {
+        if (event.getSource() == btnRegresar) {
+            escenarioPrincipal.menuPrincipalView();
+        }
+    }
+
+    public void MenuPrincipalView() {
+        escenarioPrincipal.menuPrincipalView();
     }
 }

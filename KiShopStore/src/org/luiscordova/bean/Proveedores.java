@@ -98,7 +98,7 @@ public class Proveedores {
 
     @Override
     public String toString() {
-        return " NIT " + NITProveedor+ " "+nombresProveedor ;
+        return " NIT " + NITProveedor+ "  "+nombresProveedor ;
     }
     
     

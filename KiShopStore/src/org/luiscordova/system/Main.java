@@ -22,6 +22,7 @@ import org.luiscordova.controller.MenuPrincipalController;
 import org.luiscordova.controller.ProductosTiendaController;
 import org.luiscordova.controller.ProgramadorViewController;
 import org.luiscordova.controller.ProveedorVistaController;
+import org.luiscordova.controller.TelefonoController;
 import org.luiscordova.controller.TipoProductoVistaController;
 
 /**
@@ -153,5 +154,15 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
+    public void TelefonosView() {
+        try {
+            TelefonoController EmpleadoVista = (TelefonoController) cambiarEscena("TelefonosVista.fxml", 1020, 572);
+            EmpleadoVista.setEscenarioPrincipal(this);
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

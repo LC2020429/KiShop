@@ -176,7 +176,7 @@ public class ProductosTiendaController implements Initializable {
                 resultado = new Proveedores(
                         registro.getInt("codigoProveedor"),
                         registro.getString("nitProveedor"),
-                        registro.getString("nombreProveedor"),
+                        registro.getString("nombresProveedor"),
                         registro.getString("apellidosProveedor"),
                         registro.getString("direccionProveedor"),
                         registro.getString("razonSocial"),
