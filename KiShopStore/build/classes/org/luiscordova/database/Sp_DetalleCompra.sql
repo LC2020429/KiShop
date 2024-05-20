@@ -59,3 +59,6 @@ DELIMITER ;
 CALL sp_AgregarDetalleCompra(1, 10.99, 5, 'P001', 1);
 CALL sp_AgregarDetalleCompra(2, 7.5, 2, 'P002', 2);
 CALL sp_AgregarDetalleCompra(3, 15.75, 3, 'P003', 3);
+CALL sp_EliminarDetalleCompra(3);
+
+call sp_ListarDetalleCompra ();

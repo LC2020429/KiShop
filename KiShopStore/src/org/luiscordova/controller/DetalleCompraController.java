@@ -88,17 +88,18 @@ public class DetalleCompraController implements Initializable {
         // TODO
         cargarDatos();
         cmbCodigoProducto.setItems(getProductoTienda());
-        cmbNumeroDoccumento.setItems(getDetalleProducto());
+        cmbNumeroDoccumento.setItems(getCompra());
         desactivarControles();
     }
 
     public void cargarDatos() {
-        tvDetalleCompra.setItems(getDetalleProducto());
+        tvDetalleCompra.setItems(getDetalleCompra());
         colDetalleCompra.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("codigoDetalleCompra"));
         colCostoU.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Double>("costoUnitario"));
         ccolCantidad.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("cantidad"));
         colCodigoP.setCellValueFactory(new PropertyValueFactory<DetalleCompra, String>("codigoProducto"));
         colNumeroDoc.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("numeroDocumento"));
+        
     }
 
     public void seleccionarElemento() {
@@ -106,8 +107,8 @@ public class DetalleCompraController implements Initializable {
         txtxCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
         txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCantidad()));
         // Codigo Producto   pertenece a Productos = PorductoTienda
-        cmbCodigoProducto.getSelectionModel().select(buscaCodigoProducto(((ProductoTienda) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        cmbNumeroDoccumento.getSelectionModel().select(buscarNumeroDoc(((Compra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        cmbCodigoProducto.getSelectionModel().select(buscaCodigoProducto(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+        cmbNumeroDoccumento.getSelectionModel().select(buscarNumeroDoc(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
     }
 
     public ProductoTienda buscaCodigoProducto(String codigoProducto) {
@@ -156,7 +157,7 @@ public class DetalleCompraController implements Initializable {
         return resultado;
     }
 
-    public ObservableList<DetalleCompra> getDetalleProducto() {
+    public ObservableList<DetalleCompra> getDetalleCompra() {
         ArrayList<DetalleCompra> listaP = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarDetalleCompra()}");

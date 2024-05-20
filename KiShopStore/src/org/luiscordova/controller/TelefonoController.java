@@ -92,7 +92,7 @@ public class TelefonoController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarDatos();
-        cmbPorveedor.setItems(getTelefonoProveedor());
+        cmbPorveedor.setItems(getProveedores());
         desactivarControles();
     }
 
