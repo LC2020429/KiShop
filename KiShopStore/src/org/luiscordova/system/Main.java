@@ -25,6 +25,7 @@ import org.luiscordova.controller.ProgramadorViewController;
 import org.luiscordova.controller.ProveedorVistaController;
 import org.luiscordova.controller.TelefonoController;
 import org.luiscordova.controller.TipoProductoVistaController;
+import org.luiscordova.controller.FacturaControllerView;
 
 /**
  *
@@ -152,9 +153,7 @@ public class Main extends Application {
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    
     
     public void TelefonosView() {
         try {
@@ -176,5 +175,20 @@ public class Main extends Application {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+  public void FacturaView() {
+        try {
+            FacturaControllerView FacturaView = (FacturaControllerView) cambiarEscena("FacturasVista.fxml", 1020, 572);
+            FacturaView.setEscenarioPrincipal(this);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+  
+  public static void main(String[] args) {
+        launch(args);
     }
 }

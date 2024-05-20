@@ -46,13 +46,28 @@ DELIMITER $$
 CREATE PROCEDURE sp_EliminarDetalleCompra
     (IN v_codigoDetalleCompra INT)
 BEGIN
-    -- Eliminar cualquier relación existente en la tabla Compras
-    DELETE FROM Compras WHERE numeroDocumento IN (
-        SELECT numeroDocumento FROM DetalleCompra WHERE codigoDetalleCompra = v_codigoDetalleCompra
-    );
+    -- Obtener el número de documento relacionado
+    DECLARE v_numeroDocumento INT;
+    SELECT numeroDocumento INTO v_numeroDocumento FROM DetalleCompra WHERE codigoDetalleCompra = v_codigoDetalleCompra;
 
+    -- Actualizar los valores a NULL en la tabla DetalleCompra
+    UPDATE DetalleCompra
+    SET 
+        codigoProducto = NULL,
+        numeroDocumento = NULL,
+        costoUnitario = NULL,
+        cantidad = NULL
+    WHERE codigoDetalleCompra = v_codigoDetalleCompra;
+
+    -- Actualizar los valores a NULL en la tabla Compras
+    UPDATE Compras
+    SET descripcion = NULL,
+        totalDocumento = NULL
+    WHERE numeroDocumento = v_numeroDocumento;
+    
     -- Eliminar el registro de DetalleCompra
-    DELETE FROM DetalleCompra WHERE codigoDetalleCompra = v_codigoDetalleCompra;
+	DELETE FROM DetalleCompra WHERE codigoDetalleCompra = v_codigoDetalleCompra;
+
 END $$
 DELIMITER ;
 

@@ -287,7 +287,7 @@ public class DetalleCompraController implements Initializable {
                         try {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetalleCompra(?)}");
                             procedimiento.setString(1, ((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoProducto());
-                            procedimiento.execute();
+                            procedimiento.clearParameters();
                             listaDetalleCompra.remove(tvDetalleCompra.getSelectionModel().getSelectedItem());
                             limpiarControles();
                         } catch (Exception e) {
