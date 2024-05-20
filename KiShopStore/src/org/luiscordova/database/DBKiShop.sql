@@ -79,8 +79,8 @@ CREATE TABLE DetalleCompra (
     codigoProducto VARCHAR(15),
     numeroDocumento INT,
     PRIMARY KEY (codigoDetalleCompra),
-    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto),
-    FOREIGN KEY (numeroDocumento) REFERENCES Compras(numeroDocumento)
+    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto) ON DELETE CASCADE,
+    FOREIGN KEY (numeroDocumento) REFERENCES Compras(numeroDocumento) ON DELETE CASCADE
 );
 
 CREATE TABLE Empleados (
