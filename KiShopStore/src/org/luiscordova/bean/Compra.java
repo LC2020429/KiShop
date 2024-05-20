@@ -4,12 +4,12 @@ public class Compra {
     private int numeroDocumento;
     private String fechaDocumento;
     private String descripcion;
-    private String totalDocumento;
+    private double totalDocumento;
 
     public Compra() {
     }
 
-    public Compra(int numeroDocumento, String fechaDocumento, String descripcion, String totalDocumento) {
+    public Compra(int numeroDocumento, String fechaDocumento, String descripcion, double totalDocumento) {
         this.numeroDocumento = numeroDocumento;
         this.fechaDocumento = fechaDocumento;
         this.descripcion = descripcion;
@@ -40,13 +40,19 @@ public class Compra {
         this.descripcion = descripcion;
     }
 
-    public String getTotalDocumento() {
+    public double getTotalDocumento() {
         return totalDocumento;
     }
 
-    public void setTotalDocumento(String totalDocumento) {
+    public void setTotalDocumento(double totalDocumento) {
         this.totalDocumento = totalDocumento;
     }
+
+    @Override
+    public String toString() {
+        return "Compra: " + getNumeroDocumento() + ", fecha:  " + getFechaDocumento() +  "   " +  getDescripcion() + ", total " + getTotalDocumento() + '}';
+    }
+
     
     
 }

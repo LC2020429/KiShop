@@ -108,7 +108,7 @@ public class CompraVistaController implements Initializable{
                 lista.add(new Compra(resultado.getInt("numeroDocumento"),
                         resultado.getString("fechaDocumento")  ,
                         resultado.getString("descripcion")  ,
-                                resultado.getString("totalDocumento")  
+                                resultado.getDouble("totalDocumento")  
                 ));
             }
         } catch (Exception e) {
@@ -148,14 +148,14 @@ public class CompraVistaController implements Initializable{
         // Usamos por propiedades de DatePicker el GetValue y no el el get text luego lo combertimos a texto con el toString
         registro.setFechaDocumento(FechaDatePicker.getValue().toString());
         registro.setDescripcion(txtDescripcionCompra.getText());
-        registro.setTotalDocumento(txtTotalCompra.getText());
+         registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
         try {
             // se usa procedimiento por ser local y solo permite una conexion
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_AgregarCompra(?, ?, ?, ?)}");
             procedimiento.setInt(1, registro.getNumeroDocumento());
             procedimiento.setString(2, registro.getFechaDocumento());
             procedimiento.setString(3, registro.getDescripcion());
-            procedimiento.setString(4, registro.getTotalDocumento());
+            procedimiento.setDouble(4, registro.getTotalDocumento());
             procedimiento.execute();
             listaCompra.add(registro);
         } catch (Exception e) {
@@ -232,12 +232,12 @@ public class CompraVistaController implements Initializable{
             
             registro.setFechaDocumento(FechaDatePicker.getValue().toString());
             registro.setDescripcion(txtDescripcionCompra.getText());
-            registro.setTotalDocumento(txtTotalCompra.getText());
+            registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
             
             procedimiento.setInt(1, registro.getNumeroDocumento());
             procedimiento.setString(2, registro.getFechaDocumento());
             procedimiento.setString(3, registro.getDescripcion());
-            procedimiento.setString(4, registro.getTotalDocumento());
+            procedimiento.setDouble(4, registro.getTotalDocumento());
 
             procedimiento.execute();
         } catch (Exception e) {

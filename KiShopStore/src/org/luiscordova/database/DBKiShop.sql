@@ -144,17 +144,31 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER AplicarGanancia
-AFTER UPDATE ON DetalleCompra
+AFTER INSERT ON DetalleCompra
 FOR EACH ROW
 BEGIN
     DECLARE total DECIMAL(10, 2);
     
     SET total = NEW.costoUnitario * NEW.cantidad;
 
-    UPDATE Productos
-    SET precioUnitario = total * 1.4,
-        precioDocena = total * 1.35 / 12,
-        precioMayor = total * 1.25 / 20
-    WHERE codigoProducto = NEW.codigoProducto;
+    IF NEW.cantidad >= 1 AND NEW.cantidad <= 11 THEN
+        UPDATE Productos
+        SET precioUnitario = total * 1.4,
+            precioDocena = NULL,
+            precioMayor = NULL
+        WHERE codigoProducto = NEW.codigoProducto;
+    ELSEIF NEW.cantidad >= 12 AND NEW.cantidad <= 49 THEN
+        UPDATE Productos
+        SET precioUnitario = NULL,
+            precioDocena = total * 1.35 / 12,
+            precioMayor = NULL
+        WHERE codigoProducto = NEW.codigoProducto;
+    ELSE
+        UPDATE Productos
+        SET precioUnitario = NULL,
+            precioDocena = NULL,
+            precioMayor = total * 1.25 / 20
+        WHERE codigoProducto = NEW.codigoProducto;
+    END IF;
 END $$
 DELIMITER ;

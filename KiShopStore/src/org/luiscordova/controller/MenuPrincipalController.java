@@ -33,7 +33,9 @@ public class MenuPrincipalController implements Initializable {
     MenuItem btnMenuCompras;
     @FXML
      MenuItem btnMenuTelefonos;
-
+    @FXML
+     MenuItem btnMenuDetalleCompra;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -119,8 +121,14 @@ public class MenuPrincipalController implements Initializable {
     public void setBtnMenuTelefonos(MenuItem btnMenuTelefonos) {
         this.btnMenuTelefonos = btnMenuTelefonos;
     }
-    
-    
+
+    public MenuItem getBtnMenuDetalleCompra() {
+        return btnMenuDetalleCompra;
+    }
+
+    public void setBtnMenuDetalleCompra(MenuItem btnMenuDetalleCompra) {
+        this.btnMenuDetalleCompra = btnMenuDetalleCompra;
+    }
 
     // Mandamos a la vista
     public void menuClientesView() {
@@ -181,6 +189,9 @@ public class MenuPrincipalController implements Initializable {
         }
          if (event.getSource() == btnMenuTelefonos) {
             escenarioPrincipal.TelefonosView();
+        }
+         if (event.getSource() == btnMenuDetalleCompra) {
+            escenarioPrincipal.DetalleCompraView();
         }
     }
 }

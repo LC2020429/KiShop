@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.luiscordova.controller.CargoEmpleadoController;
 import org.luiscordova.controller.ClienteVistaController;
 import org.luiscordova.controller.CompraVistaController;
+import org.luiscordova.controller.DetalleCompraController;
 import org.luiscordova.controller.EmpleadosController;
 import org.luiscordova.controller.MenuPrincipalController;
 import org.luiscordova.controller.ProductosTiendaController;
@@ -159,6 +160,17 @@ public class Main extends Application {
         try {
             TelefonoController EmpleadoVista = (TelefonoController) cambiarEscena("TelefonosVista.fxml", 1020, 572);
             EmpleadoVista.setEscenarioPrincipal(this);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    public void DetalleCompraView() {
+        try {
+            DetalleCompraController DetalleCompraView = (DetalleCompraController) cambiarEscena("DetalleCompraVista.fxml", 1020, 572);
+            DetalleCompraView.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
