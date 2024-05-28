@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -22,7 +23,7 @@
             <Image url="@../resource/FacturasImage.jpg" />
          </image>
       </ImageView>
-      <TableView fx:id="tvFactura" layoutX="387.0" layoutY="278.0" onMouseClicked="#seleccionarElemento" prefHeight="283.0" prefWidth="628.0" stylesheets="@../resource/KiShopCSS.css">
+      <TableView fx:id="tvFactura" layoutX="387.0" layoutY="278.0" onMouseClicked="#seleccionarElemento" prefHeight="283.0" prefWidth="628.0">
          <columns>
             <TableColumn fx:id="colNumeroFactura" minWidth="87.0" prefWidth="87.0" text="Numero" />
             <TableColumn fx:id="colFecha" minWidth="104.0" prefWidth="105.0" text="Estado" />
@@ -31,6 +32,10 @@
             <TableColumn fx:id="colTotal" minWidth="104.0" prefWidth="121.0" text="Cliente" />
             <TableColumn fx:id="colEmpleado" minWidth="104.0" prefWidth="107.0" text="Empleado" />
          </columns>
+         <stylesheets>
+            <URL value="@../resource/KiShopCSS.css" />
+            <URL value="@../resource/KiShopCSS.css" />
+         </stylesheets>
       </TableView>
       <GridPane layoutX="395.0" layoutY="144.0" prefHeight="116.0" prefWidth="618.0">
          <columnConstraints>

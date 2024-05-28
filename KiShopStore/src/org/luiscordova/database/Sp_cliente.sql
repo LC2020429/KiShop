@@ -1,3 +1,4 @@
+
 use DBKiShop;
 -- Procedimientos almacenados
 DELIMITER $$

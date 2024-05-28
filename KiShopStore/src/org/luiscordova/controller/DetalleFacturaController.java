@@ -23,26 +23,27 @@ import org.luiscordova.bean.ProductoTienda;
 import org.luiscordova.dao.Conexion;
 import org.luiscordova.system.Main;
 
-public class DetalleFacturaController  implements Initializable{
-     @FXML
-    private TableView  tvDetealleFactura;
+public class DetalleFacturaController implements Initializable {
+
     @FXML
-    private TableColumn  colDetaFact;
+    private TableView<DetalleFactura> tvDetealleFactura;
     @FXML
-    private TableColumn  colPrecioU;
+    private TableColumn colDetaFact;
     @FXML
-    private TableColumn  colCantidad;
+    private TableColumn colPrecioU;
+    @FXML
+    private TableColumn colCantidad;
     @FXML
     private TableColumn colNumFact;
     @FXML
-    private TableColumn  colCodProd;
+    private TableColumn colCodProd;
 
     @FXML
     private TextField txtCodDetFac;
     @FXML
     private ComboBox cmbNumFactura;
     @FXML
-    private ComboBox  cmbCodProd;
+    private ComboBox cmbCodProd;
     @FXML
     private TextField txtCantidad;
     @FXML
@@ -58,7 +59,7 @@ public class DetalleFacturaController  implements Initializable{
     private Button btnReportes;
     @FXML
     private Button btnRegresar;
-    
+
     private Main escenarioPrincipal;
     private ObservableList<DetalleFactura> listaDetalleFactura;
     private ObservableList<ProductoTienda> listaProductos;
@@ -79,7 +80,7 @@ public class DetalleFacturaController  implements Initializable{
     }
 
     public void cargarDatos() {
-        tvDetealleFactura.setItems(getFactura());
+        tvDetealleFactura.setItems(getDetalleFactura());
         colDetaFact.setCellValueFactory(new PropertyValueFactory<DetalleFactura, Integer>("codigoDetalleFactura"));
         colPrecioU.setCellValueFactory(new PropertyValueFactory<DetalleFactura, Double>("precioUnitario"));
         colCantidad.setCellValueFactory(new PropertyValueFactory<DetalleFactura, Integer>("cantidad"));
@@ -88,7 +89,7 @@ public class DetalleFacturaController  implements Initializable{
     }
 
     public void seleccionarElemento() {
-         txtCodDetFac.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura()));
+        txtCodDetFac.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura()));
         txtCantidad.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCantidad()));
         txtPrecioU.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
         cmbNumFactura.getSelectionModel().select(buscarNumeroFactura(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getNumeroFactura()));
@@ -179,7 +180,7 @@ public class DetalleFacturaController  implements Initializable{
             e.printStackTrace();
         }
         return listaFactura = FXCollections.observableList(listaP);
-    }   
+    }
 
     public ObservableList<ProductoTienda> getProducto() {
         ArrayList<ProductoTienda> listaP = new ArrayList<>();
@@ -230,24 +231,22 @@ public class DetalleFacturaController  implements Initializable{
 
     public void guardar() {
         DetalleFactura registro = new DetalleFactura();
-        registro.setNumeroFactura(Integer.parseInt(txtNumeroFactura.getText()));
-        registro.setEstado(txtEstadoF.getText());
-        registro.setTotalFactura(Double.parseDouble(txtTotalF.getText()));
-        registro.setFechaFactura(dpFecha.getValue().toString());
-        registro.setCodigoCliente(((Clientes) cmbCliente.getSelectionModel().getSelectedItem()).getCodigoCliente());
-        registro.setCodigoEmpleado((((Empleados) cmbEmpleado.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
+        registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetFac.getText()));
+        registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
+        registro.setNumeroFactura(((Factura) cmbNumFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+        registro.setCodigoProducto((((ProductoTienda) cmbCodProd.getSelectionModel().getSelectedItem()).getCodigoProducto()));
 
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_AgregarFactura(?,?,?,?,?,?)}");
-            procedimiento.setInt(1, registro.getNumeroFactura());
-            procedimiento.setString(2, registro.getEstado());
-            procedimiento.setDouble(3, registro.getTotalFactura());
-            procedimiento.setString(4, registro.getFechaFactura());
-            procedimiento.setInt(5, registro.getCodigoCliente());
-            procedimiento.setInt(6, registro.getCodigoEmpleado());
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_AgregarDetalleFactura(?,?,?,?,?)}");
+            procedimiento.setInt(1, registro.getCodigoDetalleFactura());
+            procedimiento.setDouble(2, registro.getPrecioUnitario());
+            procedimiento.setInt(3, registro.getCantidad());
+            procedimiento.setInt(4, registro.getNumeroFactura());
+            procedimiento.setString(5, registro.getCodigoProducto());
             procedimiento.execute();
 
-            listaFactura.add(registro);
+            listaDetalleFactura.add(registro);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,15 +264,15 @@ public class DetalleFacturaController  implements Initializable{
                 tipoDeOperador = operador.NINGUNO;
                 break;
             default:
-                if (tvFactura.getSelectionModel().getSelectedItem() != null) {
+                if (tvDetealleFactura.getSelectionModel().getSelectedItem() != null) {
                     int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Factura ???",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
                         try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarFactura(?)}");
-                            procedimiento.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetalleFactura(?)}");
+                            procedimiento.setInt(1, ((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura());
                             procedimiento.clearParameters();
-                            listaFactura.remove(tvFactura.getSelectionModel().getSelectedItem());
+                            listaDetalleFactura.remove(tvDetealleFactura.getSelectionModel().getSelectedItem());
                             limpiarControles();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -290,13 +289,13 @@ public class DetalleFacturaController  implements Initializable{
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
-                if (tvFactura.getSelectionModel().getSelectedItem() != null) {
+                if (tvDetealleFactura.getSelectionModel().getSelectedItem() != null) {
                     btnEditar.setText("Actualizar");
                     btnReportes.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
                     activarControles();
-                    txtNumeroFactura.setEditable(false);
+                    txtCodDetFac.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR una factura para editar");
@@ -318,21 +317,19 @@ public class DetalleFacturaController  implements Initializable{
 
     public void actualizar() {
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarFactura (?,?,?,?,?,?)}");
-            Factura registro = new Factura();
-            registro.setNumeroFactura(Integer.parseInt(txtNumeroFactura.getText()));
-            registro.setEstado(txtEstadoF.getText());
-            registro.setTotalFactura(Double.parseDouble(txtTotalF.getText()));
-            registro.setFechaFactura(dpFecha.getValue().toString());
-            registro.setCodigoCliente(((Clientes) cmbEmpleado.getSelectionModel().getSelectedItem()).getCodigoCliente());
-            registro.setCodigoEmpleado((((Empleados) cmbCliente.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarDetalleFactura (?,?,?,?,?)}");
+            DetalleFactura registro = new DetalleFactura();
+            registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetFac.getText()));
+            registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
+            registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
+            registro.setNumeroFactura(((Factura) cmbNumFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+            registro.setCodigoProducto((((ProductoTienda) cmbCodProd.getSelectionModel().getSelectedItem()).getCodigoProducto()));
 
-            procedimiento.setInt(1, registro.getNumeroFactura());
-            procedimiento.setString(2, registro.getEstado());
-            procedimiento.setDouble(3, registro.getTotalFactura());
-            procedimiento.setString(4, registro.getFechaFactura());
-            procedimiento.setInt(5, registro.getCodigoCliente());
-            procedimiento.setInt(6, registro.getCodigoEmpleado());
+            procedimiento.setInt(1, registro.getCodigoDetalleFactura());
+            procedimiento.setDouble(2, registro.getPrecioUnitario());
+            procedimiento.setInt(3, registro.getCantidad());
+            procedimiento.setInt(4, registro.getNumeroFactura());
+            procedimiento.setString(5, registro.getCodigoProducto());
             procedimiento.execute();
         } catch (Exception e) {
             e.printStackTrace();

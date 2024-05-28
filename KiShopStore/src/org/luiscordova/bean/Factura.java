@@ -67,6 +67,12 @@ public class Factura {
     public void setCodigoEmpleado(int codigoEmpleado) {
         this.codigoEmpleado = codigoEmpleado;
     }
+
+    @Override
+    public String toString() {
+        return "Factura: " + getNumeroFactura() + " estado: " + getEstado() + ""
+                + " totalFactura " + getTotalFactura() + " Cliente " + getCodigoCliente();
+    }
     
     
 }
