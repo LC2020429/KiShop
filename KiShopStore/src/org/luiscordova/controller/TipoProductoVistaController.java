@@ -30,19 +30,29 @@ public class TipoProductoVistaController implements Initializable {
     }
     private operaciones tipoOperaciones = operaciones.NINGUNO;
 
-    @FXML    private Button btnAgregarTipoProducto;
-    @FXML    private Button btnEliminarTipoProducto;
-    @FXML    private Button btnEditarTipoProducto;
-    @FXML    private Button btnReportesTipoProducto;
+    @FXML
+    private Button btnAgregarTipoProducto;
+    @FXML
+    private Button btnEliminarTipoProducto;
+    @FXML
+    private Button btnEditarTipoProducto;
+    @FXML
+    private Button btnReportesTipoProducto;
 
-    @FXML    private Button btnRegresar;
+    @FXML
+    private Button btnRegresar;
 
-    @FXML    private TableView tvTipoProducto;
-    @FXML    private TableColumn colCodigoTipoProducto;
-    @FXML    private TableColumn colDescripconTipoProducto;
+    @FXML
+    private TableView tvTipoProducto;
+    @FXML
+    private TableColumn colCodigoTipoProducto;
+    @FXML
+    private TableColumn colDescripconTipoProducto;
 
-    @FXML    private TextField txtCodigoTipoProducto;
-    @FXML    private TextField txtDescripcionTipoProducto;
+    @FXML
+    private TextField txtCodigoTipoProducto;
+    @FXML
+    private TextField txtDescripcionTipoProducto;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -60,7 +70,7 @@ public class TipoProductoVistaController implements Initializable {
         txtCodigoTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
         txtDescripcionTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getDescripcion()));
     }
-    
+
     public ObservableList<TipoProducto> getTipoProducto() {
         ArrayList<TipoProducto> lista = new ArrayList<>();
         try {
@@ -68,7 +78,7 @@ public class TipoProductoVistaController implements Initializable {
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 lista.add(new TipoProducto(resultado.getInt("codigoTipoProducto"),
-                        resultado.getString("descripcion")                                                
+                        resultado.getString("descripcion")
                 ));
             }
         } catch (Exception e) {
@@ -77,7 +87,7 @@ public class TipoProductoVistaController implements Initializable {
 
         return listaTipoProducto = FXCollections.observableList(lista);
     }
-    
+
     public void agregar() {
         switch (tipoOperaciones) {
             case NINGUNO:
@@ -101,7 +111,7 @@ public class TipoProductoVistaController implements Initializable {
                 break;
         }
     }
-    
+
     public void guardar() {
         TipoProducto registro = new TipoProducto();
         registro.setCodigoTipoProducto(Integer.parseInt(txtCodigoTipoProducto.getText()));
@@ -117,7 +127,7 @@ public class TipoProductoVistaController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     public void eliminar() {
         switch (tipoOperaciones) {
             case ACTUALIZAR:
@@ -149,12 +159,12 @@ public class TipoProductoVistaController implements Initializable {
                 }
         }
     }
-    
-     public void editar() {
+
+    public void editar() {
         switch (tipoOperaciones) {
             case NINGUNO:
+                activarControles();
                 if (tvTipoProducto.getSelectionModel().getSelectedItem() != null) {
-                                        activarControles();
                     btnEditarTipoProducto.setText("Actualizar");
                     btnReportesTipoProducto.setText("Cancelar");
                     btnAgregarTipoProducto.setDisable(true);
@@ -167,36 +177,36 @@ public class TipoProductoVistaController implements Initializable {
                 break;
             case ACTUALIZAR:
                 actualizar();
-                                limpiarControles();
-                 desactivarControles();
+                limpiarControles();
+                desactivarControles();
 
                 btnEditarTipoProducto.setText("Editar");
                 btnReportesTipoProducto.setText("Reporte");
                 btnAgregarTipoProducto.setDisable(false);
                 btnEliminarTipoProducto.setDisable(false);
-               
+
                 tipoOperaciones = operaciones.NINGUNO;
                 cargarDatos();
                 break;
         }
     }
-     
-     public void actualizar() {
+
+    public void actualizar() {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarTipoProducto (?,?)}");
             TipoProducto registro = (TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem();
-            
+
             registro.setDescripcion(txtDescripcionTipoProducto.getText());
-            
+
             procedimiento.setInt(1, registro.getCodigoTipoProducto());
             procedimiento.setString(2, registro.getDescripcion());
-            
+
             procedimiento.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-     
+
     // metodos de los textfield
     public void desactivarControles() {
         txtCodigoTipoProducto.setEditable(false);

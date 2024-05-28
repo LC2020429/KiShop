@@ -84,7 +84,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnReportes" layoutX="703.0" layoutY="470.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="85.0" style="-fx-background-color: #48AAAD;" text="Reportes">
+      <Button fx:id="btnReportes" layoutX="703.0" layoutY="470.0" mnemonicParsing="false" onAction="#editar" prefHeight="105.0" prefWidth="85.0" style="-fx-background-color: #48AAAD;" text="Reportes">
          <font>
             <Font size="16.0" />
          </font>

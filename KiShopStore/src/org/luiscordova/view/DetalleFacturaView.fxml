@@ -60,7 +60,6 @@
                </font>
             </Label>
             <TextField fx:id="txtCodDetFac" prefHeight="18.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txtNumFact" prefHeight="24.0" prefWidth="206.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <ComboBox fx:id="cmbCodProd" prefHeight="25.0" prefWidth="468.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label alignment="CENTER" prefHeight="25.0" prefWidth="170.0" text="Cantidad" textFill="WHITE" GridPane.rowIndex="3">
                <font>
@@ -74,6 +73,7 @@
             </Label>
             <TextField fx:id="txtCantidad" prefHeight="24.0" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="txtPrecioU" prefHeight="18.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cmbNumFactura" prefHeight="25.0" prefWidth="468.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button fx:id="btnAgregar" layoutX="260.0" layoutY="250.0" mnemonicParsing="false" onAction="#agregar" prefHeight="98.0" prefWidth="98.0" style="-fx-background-color: #FF3131;" text="Agregar">
@@ -91,7 +91,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnReportes" layoutX="259.0" layoutY="137.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="98.0" style="-fx-background-color: #48AAAD;" text="Reportes">
+      <Button fx:id="btnReportes" layoutX="259.0" layoutY="137.0" mnemonicParsing="false" onAction="#editar" prefHeight="98.0" prefWidth="98.0" style="-fx-background-color: #48AAAD;" text="Reportes">
          <font>
             <Font size="16.0" />
          </font>

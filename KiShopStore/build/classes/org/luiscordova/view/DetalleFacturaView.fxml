@@ -91,7 +91,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="btnReportes" layoutX="259.0" layoutY="137.0" mnemonicParsing="false" prefHeight="98.0" prefWidth="98.0" style="-fx-background-color: #48AAAD;" text="Reportes">
+      <Button fx:id="btnReportes" layoutX="259.0" layoutY="137.0" mnemonicParsing="false" onAction="#editar" prefHeight="98.0" prefWidth="98.0" style="-fx-background-color: #48AAAD;" text="Reportes">
          <font>
             <Font size="16.0" />
          </font>
