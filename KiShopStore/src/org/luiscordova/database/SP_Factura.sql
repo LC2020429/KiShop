@@ -72,6 +72,11 @@ BEGIN
 END $$
 DELIMITER ;
 
+call sp_EliminarFactura(1003);
+
 CALL sp_AgregarFactura(1001, 'Pendiente', 150.99, '2021-10-15', 1, 1);
 CALL sp_AgregarFactura(1002, 'Pagada', 99.50, '2021-10-16', 2, 1);
 CALL sp_AgregarFactura(1003, 'Pendiente', 250.75, '2021-10-17', 3, 2);
+
+
+call sp_ListarFactura();

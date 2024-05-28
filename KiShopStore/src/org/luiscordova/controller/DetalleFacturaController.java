@@ -271,7 +271,7 @@ public class DetalleFacturaController implements Initializable {
                         try {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetalleFactura(?)}");
                             procedimiento.setInt(1, ((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura());
-                            procedimiento.clearParameters();
+                            procedimiento.execute();
                             listaDetalleFactura.remove(tvDetealleFactura.getSelectionModel().getSelectedItem());
                             limpiarControles();
                         } catch (Exception e) {

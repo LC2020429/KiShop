@@ -103,14 +103,21 @@ public class FacturaControllerView implements Initializable {
 
     public void seleccionarElemento() {
         Factura compraSeleccionada = (Factura) tvFactura.getSelectionModel().getSelectedItem();
-        txtNumeroFactura.setText(String.valueOf(((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura()));
-        txtEstadoF.setText(String.valueOf(((Factura) tvFactura.getSelectionModel().getSelectedItem()).getEstado()));
-        txtTotalF.setText(String.valueOf(((Factura) tvFactura.getSelectionModel().getSelectedItem()).getTotalFactura()));
+        txtNumeroFactura.setText(String.valueOf(compraSeleccionada.getNumeroFactura()));
+        txtEstadoF.setText(String.valueOf(compraSeleccionada.getEstado()));
+        txtTotalF.setText(String.valueOf(compraSeleccionada.getTotalFactura()));
+
+        // Obtener la fecha del DatePicker
         LocalDate fechaFactura = LocalDate.parse(compraSeleccionada.getFechaFactura(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         dpFecha.setValue(fechaFactura);
 
-        cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(((Factura) tvFactura.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
-        cmbCliente.getSelectionModel().select(buscaCodigoCliente(((Factura) tvFactura.getSelectionModel().getSelectedItem()).getCodigoCliente()));
+        // Convertir LocalDate a String
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFacturaString = dpFecha.getValue().format(formatter);
+        System.out.println(fechaFacturaString);  // Aquí puedes usar el string como necesites
+
+        cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(compraSeleccionada.getCodigoEmpleado()));
+        cmbCliente.getSelectionModel().select(buscaCodigoCliente(compraSeleccionada.getCodigoCliente()));
     }
 
     public Clientes buscaCodigoCliente(int codigoCliente) {
@@ -287,7 +294,7 @@ public class FacturaControllerView implements Initializable {
                         try {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarFactura(?)}");
                             procedimiento.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
-                            procedimiento.clearParameters();
+                            procedimiento.execute();
                             listaFactura.remove(tvFactura.getSelectionModel().getSelectedItem());
                             limpiarControles();
                         } catch (Exception e) {
