@@ -48,3 +48,9 @@ BEGIN
     DELETE FROM DetalleFactura WHERE codigoDetalleFactura = v_codigoDetalleFactura;
 END $$
 DELIMITER ;
+
+CALL sp_AgregarDetalleFactura(1, 9.99, 3, 1001, 'P001');
+CALL sp_AgregarDetalleFactura(2, 12.5, 2, 1002, 'P002');
+CALL sp_AgregarDetalleFactura(3, 15.75, 4, 1003, 'P003');
+
+call sp_EliminarDetalleFactura(3);

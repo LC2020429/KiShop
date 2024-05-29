@@ -20,7 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
-import org.luiscordova.bean.CargoEmpleado;
 import org.luiscordova.bean.Clientes;
 import org.luiscordova.bean.Empleados;
 import org.luiscordova.bean.Factura;
@@ -106,24 +105,17 @@ public class FacturaControllerView implements Initializable {
         txtNumeroFactura.setText(String.valueOf(compraSeleccionada.getNumeroFactura()));
         txtEstadoF.setText(String.valueOf(compraSeleccionada.getEstado()));
         txtTotalF.setText(String.valueOf(compraSeleccionada.getTotalFactura()));
-
-        // Obtener la fecha del DatePicker
-        LocalDate fechaFactura = LocalDate.parse(compraSeleccionada.getFechaFactura(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        dpFecha.setValue(fechaFactura);
-
-        // Convertir LocalDate a String
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fechaFacturaString = dpFecha.getValue().format(formatter);
-        System.out.println(fechaFacturaString);  // Aquí puedes usar el string como necesites
-
         cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(compraSeleccionada.getCodigoEmpleado()));
         cmbCliente.getSelectionModel().select(buscaCodigoCliente(compraSeleccionada.getCodigoCliente()));
+        LocalDate fechaCompra = dpFecha.getValue(); // Obtener la fecha seleccionada del DatePicker
+
+        dpFecha.setValue(fechaCompra);
     }
 
     public Clientes buscaCodigoCliente(int codigoCliente) {
         Clientes resultado = null;
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{CALL sp_BuscarCliente(?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{CALL sp_BuscarClientePorCodigo(?)}");
             procedimiento.setInt(1, codigoCliente);
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
@@ -144,16 +136,21 @@ public class FacturaControllerView implements Initializable {
         return resultado;
     }
 
-    public CargoEmpleado buscarCodigoEmp(int codigoEmpleado) {
-        CargoEmpleado resultado = null;
+    public Empleados buscarCodigoEmp(int codigoEmpleado) {
+        Empleados resultado = null;
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_BuscarCargoEmpleadoPorCodigo(?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_BuscarEmpleadoPorCodigo(?)}");
             procedimiento.setInt(1, codigoEmpleado);
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
-                resultado = new CargoEmpleado(registro.getInt("codigoCargoEmpleado"),
-                        registro.getString("nombreCargo"),
-                        registro.getString("descripcionCargo"));
+                resultado = new Empleados(registro.getInt("codigoEmpleado"),
+                       registro.getString("nombresEmpleado"),
+                        registro.getString("apellidosEmpleado"),
+                        registro.getDouble("sueldo"),
+                        registro.getString("direccion"),
+                        registro.getNString("turno"),
+                        registro.getInt("codigoCargoEmpleado")
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -346,8 +343,8 @@ public class FacturaControllerView implements Initializable {
             registro.setEstado(txtEstadoF.getText());
             registro.setTotalFactura(Double.parseDouble(txtTotalF.getText()));
             registro.setFechaFactura(dpFecha.getValue().toString());
-            registro.setCodigoCliente(((Clientes) cmbEmpleado.getSelectionModel().getSelectedItem()).getCodigoCliente());
-            registro.setCodigoEmpleado((((Empleados) cmbCliente.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
+            registro.setCodigoCliente(((Clientes) cmbCliente.getSelectionModel().getSelectedItem()).getCodigoCliente());
+            registro.setCodigoEmpleado((((Empleados) cmbEmpleado.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
 
             procedimiento.setInt(1, registro.getNumeroFactura());
             procedimiento.setString(2, registro.getEstado());

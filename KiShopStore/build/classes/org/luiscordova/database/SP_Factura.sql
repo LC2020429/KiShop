@@ -47,10 +47,9 @@ DELIMITER $$
 CREATE PROCEDURE sp_EliminarFactura
     (IN v_numeroFactura INT)
 BEGIN
-    -- Obtener los códigos de cliente y empleado relacionados
+    -- Obtener el código de cliente relacionado
     DECLARE v_codigoCliente INT;
-    DECLARE v_codigoEmpleado INT;
-    SELECT codigoCliente, codigoEmpleado INTO v_codigoCliente, v_codigoEmpleado FROM Factura WHERE numeroFactura = v_numeroFactura;
+    SELECT codigoCliente INTO v_codigoCliente FROM Factura WHERE numeroFactura = v_numeroFactura;
 
     -- Actualizar los valores a NULL en la tabla Factura
     UPDATE Factura
@@ -61,17 +60,21 @@ BEGIN
         codigoEmpleado = NULL
     WHERE numeroFactura = v_numeroFactura;
 
-    -- Actualizar los valores a NULL en las tablas Clientes y Empleados
+    -- Actualizar el valor a NULL en la tabla Clientes
+    IF v_codigoCliente IS NOT NULL THEN
+    -- Actualizar el valor a NULL en la tabla Clientes
     UPDATE Clientes
     SET codigoCliente = NULL
     WHERE codigoCliente = v_codigoCliente;
+	END IF;
 
-    UPDATE Empleados
-    SET codigoEmpleado = NULL
-    WHERE codigoEmpleado = v_codigoEmpleado;
+
+    -- Eliminar el registro de Factura
+    DELETE FROM Factura WHERE numeroFactura = v_numeroFactura;
+
 END $$
 DELIMITER ;
-
+drop procedure sp_EliminarFactura;
 call sp_EliminarFactura(1003);
 
 CALL sp_AgregarFactura(1001, 'Pendiente', 150.99, '2021-10-15', 1, 1);

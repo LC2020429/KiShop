@@ -63,3 +63,5 @@ CALL sp_AgregarCompra(2, '2022-02-15', 'Compra de ropa para la temporada', 500.0
 CALL sp_AgregarCompra(3, '2022-03-10', 'Compra de alimentos para la despensa', 200.00);
 CALL sp_AgregarCompra(4, '2022-04-20', 'Compra de muebles para la oficina', 1000.00);
 CALL sp_AgregarCompra(5, '2022-05-05', 'Compra de artículos para el hogar', 300.00);
+
+call sp_EliminarCompra(3);

@@ -112,7 +112,7 @@ CREATE TABLE DetalleFactura (
     precioUnitario DECIMAL(10, 2),
     cantidad INT,
     numeroFactura INT,
-	codigoProducto vARCHAR(15),
+    codigoProducto VARCHAR(15),
     PRIMARY KEY (codigoDetalleFactura),
     FOREIGN KEY (numeroFactura) REFERENCES Factura(numeroFactura),
     FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto)

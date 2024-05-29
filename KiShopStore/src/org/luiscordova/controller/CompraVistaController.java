@@ -23,14 +23,16 @@ import org.luiscordova.bean.Compra;
 import org.luiscordova.dao.Conexion;
 import org.luiscordova.system.Main;
 
-public class CompraVistaController implements Initializable{
+public class CompraVistaController implements Initializable {
+
     private ObservableList<Compra> listaCompra;
     private Main escenarioPrincipal;
+
     private enum operaciones {
         AGREGAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
     private operaciones tipoDeOperaciones = operaciones.NINGUNO;
-    
+
     @FXML
     private TableView tvCompras;
 
@@ -38,13 +40,13 @@ public class CompraVistaController implements Initializable{
     private TableColumn ColNumeroDocumento;
 
     @FXML
-    private TableColumn  colFechaCompra;
+    private TableColumn colFechaCompra;
 
     @FXML
-    private TableColumn  colDescripcionCompra;
+    private TableColumn colDescripcionCompra;
 
     @FXML
-    private TableColumn  colTotalCompra;
+    private TableColumn colTotalCompra;
 
     @FXML
     private TextField txtNumeroDocumento;
@@ -72,13 +74,14 @@ public class CompraVistaController implements Initializable{
 
     @FXML
     private Button btnRegresar;
-    
-     @Override
+
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarDatos();
 
     }
+
     public void cargarDatos() {
         tvCompras.setItems(getCompra());
         ColNumeroDocumento.setCellValueFactory(new PropertyValueFactory<Compra, Integer>("numeroDocumento"));
@@ -87,28 +90,29 @@ public class CompraVistaController implements Initializable{
         colDescripcionCompra.setCellValueFactory(new PropertyValueFactory<Compra, String>("descripcion"));
         colTotalCompra.setCellValueFactory(new PropertyValueFactory<Compra, String>("totalDocumento"));
     }
-    public void seleccionarElemento() {
-        Compra compraSeleccionada = (Compra) tvCompras.getSelectionModel().getSelectedItem();
-        
-        txtNumeroDocumento.setText(String.valueOf(compraSeleccionada.getNumeroDocumento()));
-        
-        LocalDate fechaCompra = LocalDate.parse(compraSeleccionada.getFechaDocumento(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        FechaDatePicker.setValue(fechaCompra);
-        
-        txtDescripcionCompra.setText(compraSeleccionada.getDescripcion());
-        txtTotalCompra.setText(String.valueOf(compraSeleccionada.getTotalDocumento()));
-    }
+
+  public void seleccionarElemento() {
+    Compra compraSeleccionada = (Compra) tvCompras.getSelectionModel().getSelectedItem();
+
+    txtNumeroDocumento.setText(String.valueOf(compraSeleccionada.getNumeroDocumento()));
+    txtDescripcionCompra.setText(compraSeleccionada.getDescripcion());
+    txtTotalCompra.setText(String.valueOf(compraSeleccionada.getTotalDocumento()));
     
-     public ObservableList<Compra >getCompra() {
+    LocalDate fechaCompra = FechaDatePicker.getValue(); // Obtener la fecha seleccionada del DatePicker
+    
+    FechaDatePicker.setValue(fechaCompra);
+}
+
+    public ObservableList<Compra> getCompra() {
         ArrayList<Compra> lista = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarCompras()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 lista.add(new Compra(resultado.getInt("numeroDocumento"),
-                        resultado.getString("fechaDocumento")  ,
-                        resultado.getString("descripcion")  ,
-                                resultado.getDouble("totalDocumento")  
+                        resultado.getString("fechaDocumento"),
+                        resultado.getString("descripcion"),
+                        resultado.getDouble("totalDocumento")
                 ));
             }
         } catch (Exception e) {
@@ -117,8 +121,8 @@ public class CompraVistaController implements Initializable{
 
         return listaCompra = FXCollections.observableList(lista);
     }
-     
-     public void agregar() {
+
+    public void agregar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
                 activarControles();
@@ -141,14 +145,14 @@ public class CompraVistaController implements Initializable{
                 break;
         }
     }
-    
+
     public void guardar() {
         Compra registro = new Compra();
         registro.setNumeroDocumento(Integer.parseInt(txtNumeroDocumento.getText()));
         // Usamos por propiedades de DatePicker el GetValue y no el el get text luego lo combertimos a texto con el toString
         registro.setFechaDocumento(FechaDatePicker.getValue().toString());
         registro.setDescripcion(txtDescripcionCompra.getText());
-         registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
+        registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
         try {
             // se usa procedimiento por ser local y solo permite una conexion
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_AgregarCompra(?, ?, ?, ?)}");
@@ -162,7 +166,7 @@ public class CompraVistaController implements Initializable{
             e.printStackTrace();
         }
     }
-    
+
     public void eliminar() {
         switch (tipoDeOperaciones) {
             case ACTUALIZAR:
@@ -176,10 +180,11 @@ public class CompraVistaController implements Initializable{
                 break;
             default:
                 if (tvCompras.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Compra???", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Compra???", 
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
                         try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarProveedor(?)}");
+                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCompra(?)}");
                             procedimiento.setInt(1, ((Compra) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento());
                             procedimiento.execute();
                             listaCompra.remove(tvCompras.getSelectionModel().getSelectedItem());
@@ -194,7 +199,7 @@ public class CompraVistaController implements Initializable{
                 }
         }
     }
-    
+
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
         switch (tipoDeOperaciones) {
@@ -224,30 +229,32 @@ public class CompraVistaController implements Initializable{
                 break;
         }
     }
-    
-    public void actualizar() {
-        try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCompra (?,?,?,?)}");
-            Compra registro = (Compra) tvCompras.getSelectionModel().getSelectedItem();
-            
-            registro.setFechaDocumento(FechaDatePicker.getValue().toString());
-            registro.setDescripcion(txtDescripcionCompra.getText());
-            registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
-            
-            procedimiento.setInt(1, registro.getNumeroDocumento());
-            procedimiento.setString(2, registro.getFechaDocumento());
-            procedimiento.setString(3, registro.getDescripcion());
-            procedimiento.setDouble(4, registro.getTotalDocumento());
 
-            procedimiento.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void actualizar() {
+    try {
+        PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCompra (?,?,?,?)}");
+        Compra registro = (Compra) tvCompras.getSelectionModel().getSelectedItem();
+
+        registro.setDescripcion(txtDescripcionCompra.getText());
+        registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
+        
+        LocalDate fechaCompra = FechaDatePicker.getValue(); 
+        if (fechaCompra != null) { // Verificar si se seleccionó una fecha
+            registro.setFechaDocumento(fechaCompra.toString());
         }
+        
+        procedimiento.setInt(1, registro.getNumeroDocumento());
+        procedimiento.setString(2, registro.getFechaDocumento());
+        procedimiento.setString(3, registro.getDescripcion());
+        procedimiento.setDouble(4, registro.getTotalDocumento());
+
+        procedimiento.execute();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-     
-     
-     
-      public void desactivarControles() {
+}
+
+    public void desactivarControles() {
         txtNumeroDocumento.setEditable(false);
         FechaDatePicker.setEditable(false);
         txtDescripcionCompra.setEditable(false);
