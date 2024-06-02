@@ -3,6 +3,7 @@ package org.luiscordova.controller;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -273,37 +274,53 @@ public class FacturaControllerView implements Initializable {
     }
 
     public void eliminar() {
-        switch (tipoDeOperador) {
-            case ACTUALIZAR:
-                desactivarControles();
-                limpiarControles();
-                btnAgregar.setText("Agregar");
-                btnEliminar.setText("Eiminar");
-                btnEditar.setDisable(false);
-                btnReportes.setDisable(false);
-                tipoDeOperador = operador.NINGUNO;
-                break;
-            default:
-                if (tvFactura.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Factura ???",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_NO_OPTION) {
-                        try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarFactura(?)}");
-                            procedimiento.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
-                            procedimiento.execute();
-                            listaFactura.remove(tvFactura.getSelectionModel().getSelectedItem());
-                            limpiarControles();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+    switch (tipoDeOperador) {
+        case ACTUALIZAR:
+            desactivarControles();
+            limpiarControles();
+            btnAgregar.setText("Agregar");
+            btnEliminar.setText("Eliminar");
+            btnEditar.setDisable(false);
+            btnReportes.setDisable(false);
+            tipoDeOperador = operador.NINGUNO;
+            break;
+        default:
+            if (tvFactura.getSelectionModel().getSelectedItem() != null) {
+                int respuesta = JOptionPane.showConfirmDialog(null, "Confirmar la eliminación del registro", "Eliminar Factura",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    try {
+                        boolean eliminacionExitosa = false;
+                        while (!eliminacionExitosa) {
+                            try {
+                                PreparedStatement prepararEliminacion = Conexion.getInstance().getConexion().prepareCall("{call sp_PrepararEliminacion(?)}");
+                                prepararEliminacion.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+                                prepararEliminacion.execute();
+
+                                PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarFactura(?)}");
+                                eliminarFactura.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+                                eliminarFactura.execute();
+                                
+                                eliminacionExitosa = true;
+                            } catch (SQLIntegrityConstraintViolationException e) {
+                                PreparedStatement prepararEliminacion = Conexion.getInstance().getConexion().prepareCall("{call sp_PrepararEliminacion(?)}");
+                                prepararEliminacion.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+                                prepararEliminacion.execute();
+                            }
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Debe de seleccionar un Detalle  para eliminar");
+                        limpiarControles();
+                        tvFactura.getItems().remove(tvFactura.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de tvFactura
+                        tvFactura.getSelectionModel().clearSelection(); // Limpiar la selección en tvFactura
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar una Factura para eliminar");
                 }
-        }
+            }
+            break;
     }
+}
 
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {

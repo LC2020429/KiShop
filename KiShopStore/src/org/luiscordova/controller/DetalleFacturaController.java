@@ -89,12 +89,24 @@ public class DetalleFacturaController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodDetFac.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura()));
-        txtCantidad.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCantidad()));
-        txtPrecioU.setText(String.valueOf(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
-        cmbNumFactura.getSelectionModel().select(buscarNumeroFactura(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getNumeroFactura()));
-        cmbCodProd.getSelectionModel().select(buscaCodigoProducto(((DetalleFactura) tvDetealleFactura.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+    Object selectedItem = tvDetealleFactura.getSelectionModel().getSelectedItem();
+    if (selectedItem != null) {
+        DetalleFactura detalleFactura = (DetalleFactura) selectedItem;
+        txtCodDetFac.setText(String.valueOf(detalleFactura.getCodigoDetalleFactura()));
+        txtCantidad.setText(String.valueOf(detalleFactura.getCantidad()));
+        txtPrecioU.setText(String.valueOf(detalleFactura.getPrecioUnitario()));
+        cmbNumFactura.getSelectionModel().select(buscarNumeroFactura(detalleFactura.getNumeroFactura()));
+        cmbCodProd.getSelectionModel().select(buscaCodigoProducto(detalleFactura.getCodigoProducto()));
+    } else {
+        // Handle the case when no item is selected
+        // You can clear the text fields or display a message to the user
+        txtCodDetFac.setText("");
+        txtCantidad.setText("");
+        txtPrecioU.setText("");
+        cmbNumFactura.getSelectionModel().clearSelection();
+        cmbCodProd.getSelectionModel().clearSelection();
     }
+}
 
     public ProductoTienda buscaCodigoProducto(String codigoProducto) {
         ProductoTienda resultado = null;
