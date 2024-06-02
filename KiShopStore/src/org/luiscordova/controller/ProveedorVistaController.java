@@ -81,6 +81,7 @@ public class ProveedorVistaController implements Initializable {
     
     public void seleccionarElemento() {
         // castear es convertir datos 
+        try{
         txtcodigoProveedor.setText(String.valueOf(((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
         txtNITProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
         txtnombresProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
@@ -89,6 +90,9 @@ public class ProveedorVistaController implements Initializable {
         txtrazonSocial.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getRazonSocial()));
         txtcontactoPrincipal.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getContactoPrincipal()));
         txtpaginaWeb.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getPaginaWeb()));
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
      
     public ObservableList<Proveedores> getProveedores() {

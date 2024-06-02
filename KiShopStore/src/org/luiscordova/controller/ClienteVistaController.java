@@ -32,33 +32,54 @@ public class ClienteVistaController implements Initializable {
 
     private ObservableList<Clientes> listaClientes;
     private Main escenarioPrincipal;
+
     private enum operaciones {
         AGREGAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
     private operaciones tipoDeOperaciones = operaciones.NINGUNO;
-    
-    @FXML    private TableView tvCliente;
-    @FXML    private TableColumn colcodigoCliente;
-    @FXML    private TableColumn colNombreCliente;
-    @FXML    private TableColumn colApellidosClientes;
-    @FXML    private TableColumn colDireccionClientes;
-    @FXML    private TableColumn colNITCliente;
-    @FXML    private TableColumn colTelefonoClientes;
-    @FXML    private TableColumn colCorreoClientes;
 
-    @FXML    private Button btnEditar;
-    @FXML    private Button btnEliminar;
-    @FXML    private Button btnReportes;
-    @FXML    private Button btnAgregar;
+    @FXML
+    private TableView tvCliente;
+    @FXML
+    private TableColumn colcodigoCliente;
+    @FXML
+    private TableColumn colNombreCliente;
+    @FXML
+    private TableColumn colApellidosClientes;
+    @FXML
+    private TableColumn colDireccionClientes;
+    @FXML
+    private TableColumn colNITCliente;
+    @FXML
+    private TableColumn colTelefonoClientes;
+    @FXML
+    private TableColumn colCorreoClientes;
 
-    @FXML    private TextField txtClienteID;
-    @FXML    private TextField txtNombreCliente;
-    @FXML    private TextField txtApellidoCliente;
-    @FXML    private TextField txtDireccionCliente;
-    @FXML    private TextField txtNIT;
-    @FXML    private TextField txtTelefonoCli;
-    @FXML    private TextField txtCorreoCliente;
-    @FXML    private Button btnRegresar;
+    @FXML
+    private Button btnEditar;
+    @FXML
+    private Button btnEliminar;
+    @FXML
+    private Button btnReportes;
+    @FXML
+    private Button btnAgregar;
+
+    @FXML
+    private TextField txtClienteID;
+    @FXML
+    private TextField txtNombreCliente;
+    @FXML
+    private TextField txtApellidoCliente;
+    @FXML
+    private TextField txtDireccionCliente;
+    @FXML
+    private TextField txtNIT;
+    @FXML
+    private TextField txtTelefonoCli;
+    @FXML
+    private TextField txtCorreoCliente;
+    @FXML
+    private Button btnRegresar;
 
     /**
      * Initializes the controller class.
@@ -71,15 +92,18 @@ public class ClienteVistaController implements Initializable {
     }
 
     public void cargarDatos() {
-        tvCliente.setItems(getClientes());
-        colcodigoCliente.setCellValueFactory(new PropertyValueFactory<Clientes, Integer>("codigoCliente"));
-        colNITCliente.setCellValueFactory(new PropertyValueFactory<Clientes, String>("NITCliente"));
-        colNombreCliente.setCellValueFactory(new PropertyValueFactory<Clientes, String>("nombresCliente"));
-        colApellidosClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("apellidosCliente"));
-        colDireccionClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("direccionCliente"));
-        colTelefonoClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("telefonoCliente"));
-        colCorreoClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("correoCliente"));
-
+        try {
+            tvCliente.setItems(getClientes());
+            colcodigoCliente.setCellValueFactory(new PropertyValueFactory<Clientes, Integer>("codigoCliente"));
+            colNITCliente.setCellValueFactory(new PropertyValueFactory<Clientes, String>("NITCliente"));
+            colNombreCliente.setCellValueFactory(new PropertyValueFactory<Clientes, String>("nombresCliente"));
+            colApellidosClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("apellidosCliente"));
+            colDireccionClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("direccionCliente"));
+            colTelefonoClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("telefonoCliente"));
+            colCorreoClientes.setCellValueFactory(new PropertyValueFactory<Clientes, String>("correoCliente"));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void seleccionarElmento() {
@@ -232,14 +256,14 @@ public class ClienteVistaController implements Initializable {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCliente (?,?,?,?,?,?,?)}");
             Clientes registro = (Clientes) tvCliente.getSelectionModel().getSelectedItem();
-            
+
             registro.setNITCliente(txtNIT.getText());
             registro.setNombresCliente(txtNombreCliente.getText());
             registro.setApellidosCliente(txtApellidoCliente.getText());
             registro.setDireccionCliente(txtDireccionCliente.getText());
             registro.setTelefonoCliente(txtTelefonoCli.getText());
             registro.setCorreoCliente(txtCorreoCliente.getText());
-            
+
             procedimiento.setInt(1, registro.getCodigoCliente());
             procedimiento.setString(2, registro.getNITCliente());
             procedimiento.setString(3, registro.getNombresCliente());

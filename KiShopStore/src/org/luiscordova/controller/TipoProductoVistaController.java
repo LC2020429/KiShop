@@ -67,8 +67,12 @@ public class TipoProductoVistaController implements Initializable {
     }
 
     public void seleccionarElemento() {
+        try{
         txtCodigoTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
         txtDescripcionTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getDescripcion()));
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<TipoProducto> getTipoProducto() {

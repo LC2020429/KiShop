@@ -89,24 +89,28 @@ public class DetalleFacturaController implements Initializable {
     }
 
     public void seleccionarElemento() {
-    Object selectedItem = tvDetealleFactura.getSelectionModel().getSelectedItem();
-    if (selectedItem != null) {
-        DetalleFactura detalleFactura = (DetalleFactura) selectedItem;
-        txtCodDetFac.setText(String.valueOf(detalleFactura.getCodigoDetalleFactura()));
-        txtCantidad.setText(String.valueOf(detalleFactura.getCantidad()));
-        txtPrecioU.setText(String.valueOf(detalleFactura.getPrecioUnitario()));
-        cmbNumFactura.getSelectionModel().select(buscarNumeroFactura(detalleFactura.getNumeroFactura()));
-        cmbCodProd.getSelectionModel().select(buscaCodigoProducto(detalleFactura.getCodigoProducto()));
-    } else {
-        // Handle the case when no item is selected
-        // You can clear the text fields or display a message to the user
-        txtCodDetFac.setText("");
-        txtCantidad.setText("");
-        txtPrecioU.setText("");
-        cmbNumFactura.getSelectionModel().clearSelection();
-        cmbCodProd.getSelectionModel().clearSelection();
+        Object selectedItem = tvDetealleFactura.getSelectionModel().getSelectedItem();
+        try {
+            if (selectedItem != null) {
+                DetalleFactura detalleFactura = (DetalleFactura) selectedItem;
+                txtCodDetFac.setText(String.valueOf(detalleFactura.getCodigoDetalleFactura()));
+                txtCantidad.setText(String.valueOf(detalleFactura.getCantidad()));
+                txtPrecioU.setText(String.valueOf(detalleFactura.getPrecioUnitario()));
+                cmbNumFactura.getSelectionModel().select(buscarNumeroFactura(detalleFactura.getNumeroFactura()));
+                cmbCodProd.getSelectionModel().select(buscaCodigoProducto(detalleFactura.getCodigoProducto()));
+            } else {
+                // Handle the case when no item is selected
+                // You can clear the text fields or display a message to the user
+                txtCodDetFac.setText("");
+                txtCantidad.setText("");
+                txtPrecioU.setText("");
+                cmbNumFactura.getSelectionModel().clearSelection();
+                cmbCodProd.getSelectionModel().clearSelection();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
 
     public ProductoTienda buscaCodigoProducto(String codigoProducto) {
         ProductoTienda resultado = null;

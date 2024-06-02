@@ -45,7 +45,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <TableView fx:id="tvTipoProducto" layoutX="29.0" layoutY="152.0" onMouseClicked="#seleccionarElemento" prefHeight="330.0" prefWidth="583.0">
+      <TableView fx:id="tvTipoProducto" layoutX="29.0" layoutY="152.0" onMouseClicked="#seleccionarElemento" prefHeight="330.0" prefWidth="583.0" stylesheets="@../resource/KiShopCSS.css">
         <columns>
           <TableColumn fx:id="colCodigoTipoProducto" prefWidth="292.0" text="Codigo" />
           <TableColumn fx:id="colDescripconTipoProducto" minWidth="0.0" prefWidth="290.0" text="Descripcion" />

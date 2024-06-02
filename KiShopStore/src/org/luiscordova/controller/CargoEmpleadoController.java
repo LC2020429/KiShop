@@ -28,14 +28,16 @@ import org.luiscordova.system.Main;
  *
  * @author Computadora
  */
-public class CargoEmpleadoController  implements Initializable{
-     private ObservableList<CargoEmpleado> listaCargoEmpleado;
+public class CargoEmpleadoController implements Initializable {
+
+    private ObservableList<CargoEmpleado> listaCargoEmpleado;
     private Main escenarioPrincipal;
+
     private enum operaciones {
         AGREGAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
     private operaciones tipoDeOperaciones = operaciones.NINGUNO;
-    
+
     @FXML
     private TableView tvCompras;
 
@@ -71,29 +73,33 @@ public class CargoEmpleadoController  implements Initializable{
 
     @FXML
     private TextField txtDescripcionCargoEmpleado;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarDatos();
 
     }
-    
+
     public void cargarDatos() {
         tvCompras.setItems(getCargoEmpleado());
         ColCodigoCargoEmpleado.setCellValueFactory(new PropertyValueFactory<CargoEmpleado, Integer>("codigoCargoEmpleado"));
         colNombreCargo.setCellValueFactory(new PropertyValueFactory<CargoEmpleado, String>("nombreCargo"));
         colDescripcionCargo.setCellValueFactory(new PropertyValueFactory<CargoEmpleado, String>("descripcionCargo"));
     }
-    
-     public void seleccionarElmento() {
-        // castear es convertir datos 
-        txtCodigoCargoEmpleado.setText(String.valueOf(((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
-        txtNombreCargoEmpleado.setText((((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getNombreCargo()));
-        txtDescripcionCargoEmpleado.setText((((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getDescripcionCargo()));
+
+    public void seleccionarElmento() {
+        try {
+            // castear es convertir datos 
+            txtCodigoCargoEmpleado.setText(String.valueOf(((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+            txtNombreCargoEmpleado.setText((((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getNombreCargo()));
+            txtDescripcionCargoEmpleado.setText((((CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem()).getDescripcionCargo()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-     
-     public ObservableList<CargoEmpleado> getCargoEmpleado() {
+
+    public ObservableList<CargoEmpleado> getCargoEmpleado() {
         ArrayList<CargoEmpleado> lista = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ListarCargosEmpleado()}");
@@ -110,8 +116,8 @@ public class CargoEmpleadoController  implements Initializable{
 
         return listaCargoEmpleado = FXCollections.observableList(lista);
     }
-     
-     public void agregar() {
+
+    public void agregar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
                 activarControles();
@@ -153,7 +159,7 @@ public class CargoEmpleadoController  implements Initializable{
             e.printStackTrace();
         }
     }
-    
+
     public void eliminar() {
         switch (tipoDeOperaciones) {
             case ACTUALIZAR:
@@ -220,11 +226,10 @@ public class CargoEmpleadoController  implements Initializable{
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCargoEmpleado (?,?,?)}");
             CargoEmpleado registro = (CargoEmpleado) tvCompras.getSelectionModel().getSelectedItem();
-            
+
             registro.setNombreCargo(txtNombreCargoEmpleado.getText());
             registro.setDescripcionCargo(txtDescripcionCargoEmpleado.getText());
 
-            
             procedimiento.setInt(1, registro.getCodigoCargoEmpleado());
             procedimiento.setString(2, registro.getNombreCargo());
             procedimiento.setString(3, registro.getDescripcionCargo());
@@ -273,4 +278,3 @@ public class CargoEmpleadoController  implements Initializable{
         this.escenarioPrincipal = escenarioPrincipal;
     }
 }
-

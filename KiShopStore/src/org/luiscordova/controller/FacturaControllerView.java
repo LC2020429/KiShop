@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -96,21 +95,27 @@ public class FacturaControllerView implements Initializable {
         colNumeroFactura.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("numeroFactura"));
         colFecha.setCellValueFactory(new PropertyValueFactory<Factura, String>("estado"));
         colEstado.setCellValueFactory(new PropertyValueFactory<Factura, Double>("totalFactura"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<Factura, String>("fechaFactura"));
+        colCliente.setCellValueFactory(new PropertyValueFactory<Factura, String>("fechaFasctura"));
         colTotal.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("codigoCliente"));
         colEmpleado.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("codigoEmpleado"));
     }
 
     public void seleccionarElemento() {
-        Factura compraSeleccionada = (Factura) tvFactura.getSelectionModel().getSelectedItem();
-        txtNumeroFactura.setText(String.valueOf(compraSeleccionada.getNumeroFactura()));
-        txtEstadoF.setText(String.valueOf(compraSeleccionada.getEstado()));
-        txtTotalF.setText(String.valueOf(compraSeleccionada.getTotalFactura()));
-        cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(compraSeleccionada.getCodigoEmpleado()));
-        cmbCliente.getSelectionModel().select(buscaCodigoCliente(compraSeleccionada.getCodigoCliente()));
-        LocalDate fechaCompra = dpFecha.getValue(); // Obtener la fecha seleccionada del DatePicker
+        try {
+            Factura compraSeleccionada = (Factura) tvFactura.getSelectionModel().getSelectedItem();
+            txtNumeroFactura.setText(String.valueOf(compraSeleccionada.getNumeroFactura()));
+            txtEstadoF.setText(String.valueOf(compraSeleccionada.getEstado()));
+            txtTotalF.setText(String.valueOf(compraSeleccionada.getTotalFactura()));
+            cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(compraSeleccionada.getCodigoEmpleado()));
+            cmbCliente.getSelectionModel().select(buscaCodigoCliente(compraSeleccionada.getCodigoCliente()));
 
-        dpFecha.setValue(fechaCompra);
+            String fechaCompra = compraSeleccionada.getFechaFactura();
+            LocalDate fechaComprar = LocalDate.parse(fechaCompra);
+
+            dpFecha.setValue(fechaComprar);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public Clientes buscaCodigoCliente(int codigoCliente) {
@@ -145,7 +150,7 @@ public class FacturaControllerView implements Initializable {
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
                 resultado = new Empleados(registro.getInt("codigoEmpleado"),
-                       registro.getString("nombresEmpleado"),
+                        registro.getString("nombresEmpleado"),
                         registro.getString("apellidosEmpleado"),
                         registro.getDouble("sueldo"),
                         registro.getString("direccion"),
@@ -274,53 +279,41 @@ public class FacturaControllerView implements Initializable {
     }
 
     public void eliminar() {
-    switch (tipoDeOperador) {
-        case ACTUALIZAR:
-            desactivarControles();
-            limpiarControles();
-            btnAgregar.setText("Agregar");
-            btnEliminar.setText("Eliminar");
-            btnEditar.setDisable(false);
-            btnReportes.setDisable(false);
-            tipoDeOperador = operador.NINGUNO;
-            break;
-        default:
-            if (tvFactura.getSelectionModel().getSelectedItem() != null) {
-                int respuesta = JOptionPane.showConfirmDialog(null, "Confirmar la eliminación del registro", "Eliminar Factura",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    try {
-                        boolean eliminacionExitosa = false;
-                        while (!eliminacionExitosa) {
-                            try {
-                                PreparedStatement prepararEliminacion = Conexion.getInstance().getConexion().prepareCall("{call sp_PrepararEliminacion(?)}");
-                                prepararEliminacion.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
-                                prepararEliminacion.execute();
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                // Código para actualizar
+                break;
+            default:
+                if (tvFactura.getSelectionModel().getSelectedItem() != null) {
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirmar la eliminación del registro", "Eliminar Factura",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        try {
+                            int numeroFactura = ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura();
 
-                                PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarFactura(?)}");
-                                eliminarFactura.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
-                                eliminarFactura.execute();
-                                
-                                eliminacionExitosa = true;
-                            } catch (SQLIntegrityConstraintViolationException e) {
-                                PreparedStatement prepararEliminacion = Conexion.getInstance().getConexion().prepareCall("{call sp_PrepararEliminacion(?)}");
-                                prepararEliminacion.setInt(1, ((Factura) tvFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
-                                prepararEliminacion.execute();
-                            }
+                            // Eliminar las filas en la tabla detallefactura que hacen referencia a la factura
+                            PreparedStatement eliminarDetalles = Conexion.getInstance().getConexion().prepareStatement("DELETE FROM detallefactura WHERE numeroFactura = ?");
+                            eliminarDetalles.setInt(1, numeroFactura);
+                            eliminarDetalles.executeUpdate();
+
+                            // Eliminar la fila de la tabla factura
+                            PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareStatement("DELETE FROM factura WHERE numerofactura = ?");
+                            eliminarFactura.setInt(1, numeroFactura);
+                            eliminarFactura.executeUpdate();
+
+                            limpiarControles();
+                            tvFactura.getItems().remove(tvFactura.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de tvFactura
+                            tvFactura.getSelectionModel().clearSelection(); // Limpiar la selección en tvFactura
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        limpiarControles();
-                        tvFactura.getItems().remove(tvFactura.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de tvFactura
-                        tvFactura.getSelectionModel().clearSelection(); // Limpiar la selección en tvFactura
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe seleccionar una Factura para eliminar");
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe seleccionar una Factura para eliminar");
                 }
-            }
-            break;
+                break;
+        }
     }
-}
 
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {

@@ -99,16 +99,20 @@ public class DetalleCompraController implements Initializable {
         ccolCantidad.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("cantidad"));
         colCodigoP.setCellValueFactory(new PropertyValueFactory<DetalleCompra, String>("codigoProducto"));
         colNumeroDoc.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("numeroDocumento"));
-        
+
     }
 
     public void seleccionarElemento() {
-        txtCodigoDetalleC.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
-        txtxCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
-        txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCantidad()));
-        // Codigo Producto   pertenece a Productos = PorductoTienda
-        cmbCodigoProducto.getSelectionModel().select(buscaCodigoProducto(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        cmbNumeroDoccumento.getSelectionModel().select(buscarNumeroDoc(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        try {
+            txtCodigoDetalleC.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
+            txtxCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
+            txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCantidad()));
+            // Codigo Producto   pertenece a Productos = PorductoTienda
+            cmbCodigoProducto.getSelectionModel().select(buscaCodigoProducto(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+            cmbNumeroDoccumento.getSelectionModel().select(buscarNumeroDoc(((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ProductoTienda buscaCodigoProducto(String codigoProducto) {
@@ -289,7 +293,7 @@ public class DetalleCompraController implements Initializable {
                             procedimiento.setInt(1, ((DetalleCompra) tvDetalleCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
                             procedimiento.execute();
                             listaDetalleCompra.remove(tvDetalleCompra.getSelectionModel().getSelectedItem());
-                            
+
                             limpiarControles();
                         } catch (Exception e) {
                             e.printStackTrace();

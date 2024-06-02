@@ -91,18 +91,19 @@ public class CompraVistaController implements Initializable {
         colTotalCompra.setCellValueFactory(new PropertyValueFactory<Compra, String>("totalDocumento"));
     }
 
-  public void seleccionarElemento() {
+   public void seleccionarElemento() {
     Compra compraSeleccionada = (Compra) tvCompras.getSelectionModel().getSelectedItem();
 
     txtNumeroDocumento.setText(String.valueOf(compraSeleccionada.getNumeroDocumento()));
     txtDescripcionCompra.setText(compraSeleccionada.getDescripcion());
     txtTotalCompra.setText(String.valueOf(compraSeleccionada.getTotalDocumento()));
     
-    LocalDate fechaCompra = FechaDatePicker.getValue(); // Obtener la fecha seleccionada del DatePicker
+    String fechaCompraObtener = compraSeleccionada.getFechaDocumento(); // Obtener la fecha de compra como cadena de texto
     
-    FechaDatePicker.setValue(fechaCompra);
+    LocalDate fechaCompra = LocalDate.parse(fechaCompraObtener); // Convertir la cadena de texto a LocalDate
+    
+    FechaDatePicker.setValue(fechaCompra); // Asignar la fecha de compra al DatePicker
 }
-
     public ObservableList<Compra> getCompra() {
         ArrayList<Compra> lista = new ArrayList<>();
         try {
@@ -168,38 +169,40 @@ public class CompraVistaController implements Initializable {
     }
 
     public void eliminar() {
-        switch (tipoDeOperaciones) {
-            case ACTUALIZAR:
-                desactivarControles();
-                limpiarControles();
-                btnAgregar.setText("Agregar");
-                btnEliminar.setText("Eiminar");
-                btnEditar.setDisable(false);
-                btnReporte.setDisable(false);
-                tipoDeOperaciones = operaciones.NINGUNO;
-                break;
-            default:
-                if (tvCompras.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminacion del registro", "Eliminar Compra???", 
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_NO_OPTION) {
-                        try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCompra(?)}");
-                            procedimiento.setInt(1, ((Compra) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento());
-                            procedimiento.execute();
-                            listaCompra.remove(tvCompras.getSelectionModel().getSelectedItem());
-                            limpiarControles();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Debe de seleccionar Cliente para eliminar");
-                    }
-                    break;
-                }
-        }
-    }
+    switch (tipoDeOperaciones) {
+        case ACTUALIZAR:
+            // Código para actualizar
+            break;
+        default:
+            if (tvCompras.getSelectionModel().getSelectedItem() != null) {
+                int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminación del registro", "Eliminar Compra",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    try {
+                        int numeroDocumento = ((Compra) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento();
+                        
+                        // Eliminar las filas en la tabla detallecompra que hacen referencia a la compra
+                        PreparedStatement eliminarDetallesCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetallesCompra(?)}");
+                        eliminarDetallesCompra.setInt(1, numeroDocumento);
+                        eliminarDetallesCompra.execute();
 
+                        // Eliminar la fila de la tabla compras
+                        PreparedStatement eliminarCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCompra(?)}");
+                        eliminarCompra.setInt(1, numeroDocumento);
+                        eliminarCompra.execute();
+
+                        limpiarControles();
+                        listaCompra.remove(tvCompras.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de listaCompra
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar una Compra para eliminar");
+                }
+            }
+            break;
+    }
+}
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
         switch (tipoDeOperaciones) {
@@ -231,28 +234,28 @@ public class CompraVistaController implements Initializable {
     }
 
     public void actualizar() {
-    try {
-        PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCompra (?,?,?,?)}");
-        Compra registro = (Compra) tvCompras.getSelectionModel().getSelectedItem();
+        try {
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarCompra (?,?,?,?)}");
+            Compra registro = (Compra) tvCompras.getSelectionModel().getSelectedItem();
 
-        registro.setDescripcion(txtDescripcionCompra.getText());
-        registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
-        
-        LocalDate fechaCompra = FechaDatePicker.getValue(); 
-        if (fechaCompra != null) { // Verificar si se seleccionó una fecha
-            registro.setFechaDocumento(fechaCompra.toString());
+            registro.setDescripcion(txtDescripcionCompra.getText());
+            registro.setTotalDocumento(Double.parseDouble(txtTotalCompra.getText()));
+
+            LocalDate fechaCompra = FechaDatePicker.getValue();
+            if (fechaCompra != null) { // Verificar si se seleccionó una fecha
+                registro.setFechaDocumento(fechaCompra.toString());
+            }
+
+            procedimiento.setInt(1, registro.getNumeroDocumento());
+            procedimiento.setString(2, registro.getFechaDocumento());
+            procedimiento.setString(3, registro.getDescripcion());
+            procedimiento.setDouble(4, registro.getTotalDocumento());
+
+            procedimiento.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        
-        procedimiento.setInt(1, registro.getNumeroDocumento());
-        procedimiento.setString(2, registro.getFechaDocumento());
-        procedimiento.setString(3, registro.getDescripcion());
-        procedimiento.setDouble(4, registro.getTotalDocumento());
-
-        procedimiento.execute();
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
 
     public void desactivarControles() {
         txtNumeroDocumento.setEditable(false);
@@ -293,5 +296,5 @@ public class CompraVistaController implements Initializable {
 
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
-    }
+    }        
 }

@@ -80,7 +80,7 @@ public class ProductosTiendaController implements Initializable {
 
     @FXML
     private TextField txtExisistencia;
-    
+
     @FXML
     private TextField txtDescripcion;
 
@@ -138,15 +138,19 @@ public class ProductosTiendaController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodigoProducto.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        txtDescripcion.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
-        txtPrecioUnitario.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
-        txtPrecioDocena.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioDocena()));
-        txtPrecioMayor.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioMayor()));
-        txtImagen.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getImagenProducto()));
-        txtExisistencia.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getExistencia()));
-        cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
-        cmbCodigoProveedor.getSelectionModel().select(buscarProveedor(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+        try {
+            txtCodigoProducto.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+            txtDescripcion.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
+            txtPrecioUnitario.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
+            txtPrecioDocena.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioDocena()));
+            txtPrecioMayor.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getPrecioMayor()));
+            txtImagen.setText((((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getImagenProducto()));
+            txtExisistencia.setText(String.valueOf(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getExistencia()));
+            cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
+            cmbCodigoProveedor.getSelectionModel().select(buscarProveedor(((ProductoTienda) tvProducto.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public TipoProducto buscarTipoProducto(int codigoTipoProducto) {
