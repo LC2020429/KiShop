@@ -67,10 +67,10 @@ public class TipoProductoVistaController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        try{
-        txtCodigoTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
-        txtDescripcionTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getDescripcion()));
-        }catch (Exception e) {
+        try {
+            txtCodigoTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
+            txtDescripcionTipoProducto.setText(String.valueOf(((TipoProducto) tvTipoProducto.getSelectionModel().getSelectedItem()).getDescripcion()));
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -167,13 +167,15 @@ public class TipoProductoVistaController implements Initializable {
     public void editar() {
         switch (tipoOperaciones) {
             case NINGUNO:
-                activarControles();
+
                 if (tvTipoProducto.getSelectionModel().getSelectedItem() != null) {
                     btnEditarTipoProducto.setText("Actualizar");
                     btnReportesTipoProducto.setText("Cancelar");
                     btnAgregarTipoProducto.setDisable(true);
                     btnEliminarTipoProducto.setDisable(true);
                     txtCodigoTipoProducto.setEditable(false);
+                    activarControles();
+                    txtCodigoTipoProducto.setEditable(true);
                     tipoOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");
@@ -181,16 +183,16 @@ public class TipoProductoVistaController implements Initializable {
                 break;
             case ACTUALIZAR:
                 actualizar();
-                limpiarControles();
-                desactivarControles();
-
                 btnEditarTipoProducto.setText("Editar");
                 btnReportesTipoProducto.setText("Reporte");
                 btnAgregarTipoProducto.setDisable(false);
                 btnEliminarTipoProducto.setDisable(false);
-
+                txtCodigoTipoProducto.setEditable(false);
+                limpiarControles();
+                desactivarControles();
                 tipoOperaciones = operaciones.NINGUNO;
                 cargarDatos();
+                txtCodigoTipoProducto.setEditable(true);
                 break;
         }
     }

@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/system/Main.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/FacturaControllerView.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/DetalleCompraController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/MenuPrincipalController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/Repositorio2020429/KiShop/KiShopStore/src/org/luiscordova/controller/EmpleadosController.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -47,12 +47,15 @@ BEGIN
 END $$
 DELIMITER ;
 
--- Eliminar
 DELIMITER $$
 CREATE PROCEDURE sp_EliminarCargoEmpleado(
     IN v_codigoCargoEmpleado INT
 )
 BEGIN
+    -- Actualizar la columna en la tabla "Empleados"
+    UPDATE Empleados SET codigoCargoEmpleado = NULL WHERE codigoCargoEmpleado = v_codigoCargoEmpleado;
+    
+    -- Eliminar el registro de la tabla "CargoEmpleado"
     DELETE FROM CargoEmpleado WHERE codigoCargoEmpleado = v_codigoCargoEmpleado;
 END $$
 DELIMITER ;
@@ -177,12 +180,17 @@ BEGIN
     WHERE codigoProveedor = v_codigoProveedor;
 END $$
 DELIMITER ;
--- Eliminar
+
 DELIMITER $$
 CREATE PROCEDURE sp_EliminarProveedor(
     IN v_codigoProveedor INT
 )
 BEGIN
+    -- Actualizar las columnas relacionadas en la tabla "Productos" y "TelefonoProveedor"
+    UPDATE Productos SET codigoProveedor = NULL WHERE codigoProveedor = v_codigoProveedor;
+    UPDATE TelefonoProveedor SET codigoProveedor = NULL WHERE codigoProveedor = v_codigoProveedor;
+
+    -- Eliminar el registro de la tabla "Proveedores"
     DELETE FROM Proveedores WHERE codigoProveedor = v_codigoProveedor;
 END $$
 DELIMITER ;
@@ -238,12 +246,18 @@ BEGIN
 END $$
 DELIMITER ;
 call sp_ActualizarCliente('2','Jose','Figueroa','Amatitlan','1265289635741','98562471','jose@outlook.com');
--- Eliminar
+
+
 DELIMITER $$
 CREATE PROCEDURE sp_EliminarCliente(
     IN _codigoCliente INT
 )
 BEGIN
+    -- Actualizar las columnas relacionadas en la tabla "Factura" y "DetalleFactura"
+    UPDATE Factura SET codigoCliente = NULL WHERE codigoCliente = _codigoCliente;
+    UPDATE DetalleFactura SET numeroFactura = NULL WHERE numeroFactura IN (SELECT numeroFactura FROM Factura WHERE codigoCliente = _codigoCliente);
+
+    -- Eliminar el registro de la tabla "Clientes"
     DELETE FROM Clientes WHERE codigoCliente = _codigoCliente;
 END $$
 DELIMITER ;
@@ -320,7 +334,6 @@ CALL sp_AgregarCompra(3, '2022-03-10', 'Compra de alimentos para la despensa', 2
 CALL sp_AgregarCompra(4, '2022-04-20', 'Compra de muebles para la oficina', 1000.00);
 CALL sp_AgregarCompra(5, '2022-05-05', 'Compra de artículos para el hogar', 300.00);
 
-call sp_EliminarCompra(3);
 
 -- agregar
 DELIMITER $$
@@ -410,9 +423,16 @@ END $$
 DELIMITER ;
 -- Eliminar
 DELIMITER $$
-CREATE PROCEDURE sp_EliminarTipoProducto( IN v_codigoTipoProducto INT)
+CREATE PROCEDURE sp_EliminarTipoProducto(IN p_codigoTipoProducto INT)
 BEGIN
-    DELETE FROM TipoProducto WHERE codigoTipoProducto = v_codigoTipoProducto;
+    -- Actualizar la llave foránea en la tabla "Productos"
+    UPDATE Productos
+    SET codigoTipoProducto = NULL
+    WHERE codigoTipoProducto = p_codigoTipoProducto;
+
+    -- Eliminar el tipo de producto de la tabla "TipoProducto"
+    DELETE FROM TipoProducto
+    WHERE codigoTipoProducto = p_codigoTipoProducto;
 END $$
 DELIMITER ;
 
@@ -422,7 +442,6 @@ CALL sp_AgregarTipoProducto(2, 'Ropa');
 CALL sp_AgregarTipoProducto(3, 'Alimentos');
 CALL sp_AgregarTipoProducto(4, 'Muebles');
 CALL sp_AgregarTipoProducto(5, 'Hogar');
-
 -- Procedimientos almacenados para Productos
 -- buscar
 DELIMITER $$

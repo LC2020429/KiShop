@@ -231,8 +231,9 @@ public class ClienteVistaController implements Initializable {
                     btnReportes.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
+                    txtClienteID.setDisable(true);
                     activarControles();
-                    txtClienteID.setEditable(false);
+                    txtClienteID.setDisable(true);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un cliente para editar");
@@ -244,10 +245,14 @@ public class ClienteVistaController implements Initializable {
                 btnReportes.setText("Reporte");
                 btnAgregar.setDisable(false);
                 btnEliminar.setDisable(false);
+                txtClienteID.setDisable(true);
+
                 desactivarControles();
                 limpiarControles();
                 tipoDeOperaciones = operaciones.NINGUNO;
                 cargarDatos();
+                txtClienteID.setDisable(false);
+
                 break;
         }
     }

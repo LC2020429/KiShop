@@ -91,19 +91,24 @@ public class CompraVistaController implements Initializable {
         colTotalCompra.setCellValueFactory(new PropertyValueFactory<Compra, String>("totalDocumento"));
     }
 
-   public void seleccionarElemento() {
-    Compra compraSeleccionada = (Compra) tvCompras.getSelectionModel().getSelectedItem();
+    public void seleccionarElemento() {
+        try {
+            Compra compraSeleccionada = (Compra) tvCompras.getSelectionModel().getSelectedItem();
 
-    txtNumeroDocumento.setText(String.valueOf(compraSeleccionada.getNumeroDocumento()));
-    txtDescripcionCompra.setText(compraSeleccionada.getDescripcion());
-    txtTotalCompra.setText(String.valueOf(compraSeleccionada.getTotalDocumento()));
-    
-    String fechaCompraObtener = compraSeleccionada.getFechaDocumento(); // Obtener la fecha de compra como cadena de texto
-    
-    LocalDate fechaCompra = LocalDate.parse(fechaCompraObtener); // Convertir la cadena de texto a LocalDate
-    
-    FechaDatePicker.setValue(fechaCompra); // Asignar la fecha de compra al DatePicker
-}
+            txtNumeroDocumento.setText(String.valueOf(compraSeleccionada.getNumeroDocumento()));
+            txtDescripcionCompra.setText(compraSeleccionada.getDescripcion());
+            txtTotalCompra.setText(String.valueOf(compraSeleccionada.getTotalDocumento()));
+
+            String fechaCompraObtener = compraSeleccionada.getFechaDocumento(); // Obtener la fecha de compra como cadena de texto
+
+            LocalDate fechaCompra = LocalDate.parse(fechaCompraObtener); // Convertir la cadena de texto a LocalDate
+
+            FechaDatePicker.setValue(fechaCompra); // Asignar la fecha de compra al DatePicker
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public ObservableList<Compra> getCompra() {
         ArrayList<Compra> lista = new ArrayList<>();
         try {
@@ -169,40 +174,41 @@ public class CompraVistaController implements Initializable {
     }
 
     public void eliminar() {
-    switch (tipoDeOperaciones) {
-        case ACTUALIZAR:
-            // Código para actualizar
-            break;
-        default:
-            if (tvCompras.getSelectionModel().getSelectedItem() != null) {
-                int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminación del registro", "Eliminar Compra",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    try {
-                        int numeroDocumento = ((Compra) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento();
-                        
-                        // Eliminar las filas en la tabla detallecompra que hacen referencia a la compra
-                        PreparedStatement eliminarDetallesCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetallesCompra(?)}");
-                        eliminarDetallesCompra.setInt(1, numeroDocumento);
-                        eliminarDetallesCompra.execute();
+        switch (tipoDeOperaciones) {
+            case ACTUALIZAR:
+                // Código para actualizar
+                break;
+            default:
+                if (tvCompras.getSelectionModel().getSelectedItem() != null) {
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma la eliminación del registro", "Eliminar Compra",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        try {
+                            int numeroDocumento = ((Compra) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento();
 
-                        // Eliminar la fila de la tabla compras
-                        PreparedStatement eliminarCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCompra(?)}");
-                        eliminarCompra.setInt(1, numeroDocumento);
-                        eliminarCompra.execute();
+                            // Eliminar las filas en la tabla detallecompra que hacen referencia a la compra
+                            PreparedStatement eliminarDetallesCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarDetalleCompra(?)}");
+                            eliminarDetallesCompra.setInt(1, numeroDocumento);
+                            eliminarDetallesCompra.execute();
 
-                        limpiarControles();
-                        listaCompra.remove(tvCompras.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de listaCompra
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                            // Eliminar la fila de la tabla compras
+                            PreparedStatement eliminarCompra = Conexion.getInstance().getConexion().prepareCall("{call sp_EliminarCompra(?)}");
+                            eliminarCompra.setInt(1, numeroDocumento);
+                            eliminarCompra.execute();
+
+                            limpiarControles();
+                            listaCompra.remove(tvCompras.getSelectionModel().getSelectedItem()); // Eliminar el elemento seleccionado de listaCompra
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Debe seleccionar una Compra para eliminar");
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe seleccionar una Compra para eliminar");
                 }
-            }
-            break;
+                break;
+        }
     }
-}
+
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
         switch (tipoDeOperaciones) {
@@ -212,6 +218,7 @@ public class CompraVistaController implements Initializable {
                     btnReporte.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
+                    txtNumeroDocumento.setDisable(true);
                     activarControles();
                     txtNumeroDocumento.setEditable(false);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
@@ -225,10 +232,12 @@ public class CompraVistaController implements Initializable {
                 btnReporte.setText("Reporte");
                 btnAgregar.setDisable(false);
                 btnEliminar.setDisable(false);
+                txtNumeroDocumento.setDisable(true);
                 desactivarControles();
                 limpiarControles();
                 tipoDeOperaciones = operaciones.NINGUNO;
                 cargarDatos();
+                txtNumeroDocumento.setDisable(false);
                 break;
         }
     }
@@ -296,5 +305,5 @@ public class CompraVistaController implements Initializable {
 
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
-    }        
+    }
 }

@@ -201,8 +201,9 @@ public class CargoEmpleadoController implements Initializable {
                     btnReporte.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
+                    txtCodigoCargoEmpleado.setDisable(true);
                     activarControles();
-                    txtCodigoCargoEmpleado.setEditable(false);
+                    txtCodigoCargoEmpleado.setDisable(false);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un cliente para editar");
@@ -214,10 +215,12 @@ public class CargoEmpleadoController implements Initializable {
                 btnReporte.setText("Reporte");
                 btnAgregar.setDisable(false);
                 btnEliminar.setDisable(false);
+                txtCodigoCargoEmpleado.setDisable(true);
                 desactivarControles();
                 limpiarControles();
                 tipoDeOperaciones = operaciones.NINGUNO;
                 cargarDatos();
+                txtCodigoCargoEmpleado.setDisable(false);
                 break;
         }
     }

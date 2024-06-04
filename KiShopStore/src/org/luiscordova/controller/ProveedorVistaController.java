@@ -29,44 +29,68 @@ import org.luiscordova.system.Main;
  * @author Computadora
  */
 public class ProveedorVistaController implements Initializable {
+
     private ObservableList<Proveedores> listaProveedores;
     private Main escenarioPrincipal;
+
     private enum operaciones {
         AGREGAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
     private operaciones tipoDeOperaciones = operaciones.NINGUNO;
-    
-    @FXML    private TableView tvProveedores;
-    @FXML    private TableColumn colcodigoProveedor;
-    @FXML    private TableColumn colNITProveedor;
-    @FXML    private TableColumn colnombresProveedor;
-    @FXML    private TableColumn  colapellidosProveedor;
-    @FXML    private TableColumn  coldireccionProveedor;
-    @FXML    private TableColumn  colrazonSocial;
-    @FXML    private TableColumn  colcontactoPrincipal;
-    @FXML    private TableColumn  colpaginaWeb;
-    
-    @FXML    private TextField txtcodigoProveedor;
-    @FXML    private TextField txtNITProveedor;
-    @FXML    private TextField txtnombresProveedor;
-    @FXML    private TextField txtapellidosProveedor;
-    @FXML    private TextField txtdireccionProveedor;
-    @FXML    private TextField txtrazonSocial;
-    @FXML    private TextField txtcontactoPrincipal;
-    @FXML    private TextField txtpaginaWeb;
 
-    @FXML    private Button btnAgregarProveedor;
-    @FXML    private Button btnEliminarProveedor;
-    @FXML    private Button btnEditarProveedor;
-    @FXML    private Button btnReportesProveedor;
-    @FXML    private Button btnRegresar;
-    
+    @FXML
+    private TableView tvProveedores;
+    @FXML
+    private TableColumn colcodigoProveedor;
+    @FXML
+    private TableColumn colNITProveedor;
+    @FXML
+    private TableColumn colnombresProveedor;
+    @FXML
+    private TableColumn colapellidosProveedor;
+    @FXML
+    private TableColumn coldireccionProveedor;
+    @FXML
+    private TableColumn colrazonSocial;
+    @FXML
+    private TableColumn colcontactoPrincipal;
+    @FXML
+    private TableColumn colpaginaWeb;
+
+    @FXML
+    private TextField txtcodigoProveedor;
+    @FXML
+    private TextField txtNITProveedor;
+    @FXML
+    private TextField txtnombresProveedor;
+    @FXML
+    private TextField txtapellidosProveedor;
+    @FXML
+    private TextField txtdireccionProveedor;
+    @FXML
+    private TextField txtrazonSocial;
+    @FXML
+    private TextField txtcontactoPrincipal;
+    @FXML
+    private TextField txtpaginaWeb;
+
+    @FXML
+    private Button btnAgregarProveedor;
+    @FXML
+    private Button btnEliminarProveedor;
+    @FXML
+    private Button btnEditarProveedor;
+    @FXML
+    private Button btnReportesProveedor;
+    @FXML
+    private Button btnRegresar;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cargarDatos();
     }
-    
+
     public void cargarDatos() {
         tvProveedores.setItems(getProveedores());
         colcodigoProveedor.setCellValueFactory(new PropertyValueFactory<Proveedores, Integer>("codigoProveedor"));
@@ -78,23 +102,23 @@ public class ProveedorVistaController implements Initializable {
         colcontactoPrincipal.setCellValueFactory(new PropertyValueFactory<Proveedores, String>("contactoPrincipal"));
         colpaginaWeb.setCellValueFactory(new PropertyValueFactory<Proveedores, String>("paginaWeb"));
     }
-    
+
     public void seleccionarElemento() {
         // castear es convertir datos 
-        try{
-        txtcodigoProveedor.setText(String.valueOf(((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
-        txtNITProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
-        txtnombresProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
-        txtapellidosProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getApellidosProveedor()));
-        txtdireccionProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getDireccionProveedor()));
-        txtrazonSocial.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getRazonSocial()));
-        txtcontactoPrincipal.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getContactoPrincipal()));
-        txtpaginaWeb.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getPaginaWeb()));
-        }catch (Exception e) {
+        try {
+            txtcodigoProveedor.setText(String.valueOf(((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+            txtNITProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
+            txtnombresProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
+            txtapellidosProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getApellidosProveedor()));
+            txtdireccionProveedor.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getDireccionProveedor()));
+            txtrazonSocial.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getRazonSocial()));
+            txtcontactoPrincipal.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getContactoPrincipal()));
+            txtpaginaWeb.setText((((Proveedores) tvProveedores.getSelectionModel().getSelectedItem()).getPaginaWeb()));
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-     
+
     public ObservableList<Proveedores> getProveedores() {
         ArrayList<Proveedores> lista = new ArrayList<>();
         try {
@@ -108,7 +132,7 @@ public class ProveedorVistaController implements Initializable {
                         resultado.getString("direccionProveedor"),
                         resultado.getString("razonSocial"),
                         resultado.getString("contactoPrincipal"),
-                        resultado.getString("paginaWeb")                        
+                        resultado.getString("paginaWeb")
                 ));
             }
         } catch (Exception e) {
@@ -117,7 +141,7 @@ public class ProveedorVistaController implements Initializable {
 
         return listaProveedores = FXCollections.observableList(lista);
     }
-    
+
     public void agregar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
@@ -141,7 +165,7 @@ public class ProveedorVistaController implements Initializable {
                 break;
         }
     }
-    
+
     public void guardar() {
         Proveedores registro = new Proveedores();
         registro.setCodigoProveedor(Integer.parseInt(txtcodigoProveedor.getText()));
@@ -169,7 +193,7 @@ public class ProveedorVistaController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     public void eliminar() {
         switch (tipoDeOperaciones) {
             case ACTUALIZAR:
@@ -201,7 +225,7 @@ public class ProveedorVistaController implements Initializable {
                 }
         }
     }
-    
+
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
         switch (tipoDeOperaciones) {
@@ -211,8 +235,9 @@ public class ProveedorVistaController implements Initializable {
                     btnReportesProveedor.setText("Cancelar");
                     btnAgregarProveedor.setDisable(true);
                     btnEliminarProveedor.setDisable(true);
-                    activarControles();
                     txtcodigoProveedor.setEditable(false);
+                    txtcodigoProveedor.setStyle("-fx-opacity: 1.0;"); // Para mantener el aspecto visual del texto no seleccionable
+                    activarControles();
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");
@@ -224,6 +249,8 @@ public class ProveedorVistaController implements Initializable {
                 btnReportesProveedor.setText("Reporte");
                 btnAgregarProveedor.setDisable(false);
                 btnEliminarProveedor.setDisable(false);
+                txtcodigoProveedor.setEditable(false);
+                txtcodigoProveedor.setStyle("-fx-opacity: 1.0;"); // Para mantener el aspecto visual del texto no seleccionable
                 desactivarControles();
                 limpiarControles();
                 tipoDeOperaciones = operaciones.NINGUNO;
@@ -231,12 +258,12 @@ public class ProveedorVistaController implements Initializable {
                 break;
         }
     }
-    
+
     public void actualizar() {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_ActualizarProveedor (?,?,?,?,?,?,?,?)}");
             Proveedores registro = (Proveedores) tvProveedores.getSelectionModel().getSelectedItem();
-            
+
             registro.setNITProveedor(txtNITProveedor.getText());
             registro.setNombresProveedor(txtnombresProveedor.getText());
             registro.setApellidosProveedor(txtapellidosProveedor.getText());
@@ -244,7 +271,7 @@ public class ProveedorVistaController implements Initializable {
             registro.setRazonSocial(txtrazonSocial.getText());
             registro.setContactoPrincipal(txtcontactoPrincipal.getText());
             registro.setPaginaWeb(txtpaginaWeb.getText());
-            
+
             procedimiento.setInt(1, registro.getCodigoProveedor());
             procedimiento.setString(2, registro.getNITProveedor());
             procedimiento.setString(3, registro.getNombresProveedor());
@@ -258,7 +285,7 @@ public class ProveedorVistaController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     // METODOS PARA CONTROLAR DONDE SE INGRESA EL TEXTO
     public void desactivarControles() {
         txtcodigoProveedor.setEditable(false);
