@@ -197,14 +197,14 @@ public class CargoEmpleadoController implements Initializable {
         switch (tipoDeOperaciones) {
             case NINGUNO:
                 if (tvCompras.getSelectionModel().getSelectedItem() != null) {
+                     activarControles();
                     btnEditar.setText("Actualizar");
                     btnReporte.setText("Cancelar");
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
                     txtCodigoCargoEmpleado.setDisable(true);
-                    activarControles();
-                    txtCodigoCargoEmpleado.setDisable(false);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
+                    
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un cliente para editar");
                 }

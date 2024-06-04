@@ -164,38 +164,36 @@ public class TipoProductoVistaController implements Initializable {
         }
     }
 
-    public void editar() {
-        switch (tipoOperaciones) {
-            case NINGUNO:
-
-                if (tvTipoProducto.getSelectionModel().getSelectedItem() != null) {
-                    btnEditarTipoProducto.setText("Actualizar");
-                    btnReportesTipoProducto.setText("Cancelar");
-                    btnAgregarTipoProducto.setDisable(true);
-                    btnEliminarTipoProducto.setDisable(true);
-                    txtCodigoTipoProducto.setEditable(false);
-                    activarControles();
-                    txtCodigoTipoProducto.setEditable(true);
-                    tipoOperaciones = operaciones.ACTUALIZAR;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");
-                }
-                break;
-            case ACTUALIZAR:
-                actualizar();
-                btnEditarTipoProducto.setText("Editar");
-                btnReportesTipoProducto.setText("Reporte");
-                btnAgregarTipoProducto.setDisable(false);
-                btnEliminarTipoProducto.setDisable(false);
-                txtCodigoTipoProducto.setEditable(false);
-                limpiarControles();
-                desactivarControles();
-                tipoOperaciones = operaciones.NINGUNO;
-                cargarDatos();
-                txtCodigoTipoProducto.setEditable(true);
-                break;
-        }
+   public void editar() {
+    switch (tipoOperaciones) {
+        case NINGUNO:
+            if (tvTipoProducto.getSelectionModel().getSelectedItem() != null) {
+                btnEditarTipoProducto.setText("Actualizar");
+                btnReportesTipoProducto.setText("Cancelar");
+                btnAgregarTipoProducto.setDisable(true);
+                btnEliminarTipoProducto.setDisable(true);
+                txtCodigoTipoProducto.setDisable(true);
+                activarControles();
+                tipoOperaciones = operaciones.ACTUALIZAR;
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un tipo de producto para editar");
+            }
+            break;
+        case ACTUALIZAR:
+            actualizar();
+            btnEditarTipoProducto.setText("Editar");
+            btnReportesTipoProducto.setText("Reporte");
+            btnAgregarTipoProducto.setDisable(false);
+            btnEliminarTipoProducto.setDisable(false);
+            txtCodigoTipoProducto.setDisable(true);
+            desactivarControles();
+            limpiarControles();
+            tipoOperaciones = operaciones.NINGUNO;
+            cargarDatos();
+            txtCodigoTipoProducto.setDisable(false); // Habilitar la edición del campo
+            break;
     }
+}
 
     public void actualizar() {
         try {

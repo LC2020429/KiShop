@@ -220,7 +220,6 @@ public class CompraVistaController implements Initializable {
                     btnEliminar.setDisable(true);
                     txtNumeroDocumento.setDisable(true);
                     activarControles();
-                    txtNumeroDocumento.setEditable(false);
                     tipoDeOperaciones = operaciones.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");

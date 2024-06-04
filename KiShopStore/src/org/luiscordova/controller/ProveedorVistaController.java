@@ -228,36 +228,35 @@ public class ProveedorVistaController implements Initializable {
 
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
     public void editar() {
-        switch (tipoDeOperaciones) {
-            case NINGUNO:
-                if (tvProveedores.getSelectionModel().getSelectedItem() != null) {
-                    btnEditarProveedor.setText("Actualizar");
-                    btnReportesProveedor.setText("Cancelar");
-                    btnAgregarProveedor.setDisable(true);
-                    btnEliminarProveedor.setDisable(true);
-                    txtcodigoProveedor.setEditable(false);
-                    txtcodigoProveedor.setStyle("-fx-opacity: 1.0;"); // Para mantener el aspecto visual del texto no seleccionable
-                    activarControles();
-                    tipoDeOperaciones = operaciones.ACTUALIZAR;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");
-                }
-                break;
-            case ACTUALIZAR:
-                actualizar();
-                btnEditarProveedor.setText("Editar");
-                btnReportesProveedor.setText("Reporte");
-                btnAgregarProveedor.setDisable(false);
-                btnEliminarProveedor.setDisable(false);
-                txtcodigoProveedor.setEditable(false);
-                txtcodigoProveedor.setStyle("-fx-opacity: 1.0;"); // Para mantener el aspecto visual del texto no seleccionable
-                desactivarControles();
-                limpiarControles();
-                tipoDeOperaciones = operaciones.NINGUNO;
-                cargarDatos();
-                break;
-        }
+    switch (tipoDeOperaciones) {
+        case NINGUNO:
+            if (tvProveedores.getSelectionModel().getSelectedItem() != null) {
+                btnEditarProveedor.setText("Actualizar");
+                btnReportesProveedor.setText("Cancelar");
+                btnAgregarProveedor.setDisable(true);
+                btnEliminarProveedor.setDisable(true);
+                txtcodigoProveedor.setDisable(true);
+                activarControles();
+                tipoDeOperaciones = operaciones.ACTUALIZAR;
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe SELECCIONAR un proveedor para editar");
+            }
+            break;
+        case ACTUALIZAR:
+            actualizar();
+            btnEditarProveedor.setText("Editar");
+            btnReportesProveedor.setText("Reporte");
+            btnAgregarProveedor.setDisable(false);
+            btnEliminarProveedor.setDisable(false);
+            txtcodigoProveedor.setDisable(true);
+            desactivarControles();
+            limpiarControles();
+            tipoDeOperaciones = operaciones.NINGUNO;
+            cargarDatos();
+            txtcodigoProveedor.setDisable(false); // Habilitar la edición del campo
+            break;
     }
+}
 
     public void actualizar() {
         try {
