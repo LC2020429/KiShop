@@ -12,6 +12,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
 import org.luiscordova.bean.Clientes;
 import org.luiscordova.dao.Conexion;
+import org.luiscordova.report.GenerarReportes;
 import org.luiscordova.system.Main;
 
 public class ClienteVistaController implements Initializable {
@@ -106,6 +109,7 @@ public class ClienteVistaController implements Initializable {
         }
     }
 
+    @FXML
     public void seleccionarElmento() {
         // castear es convertir datos 
         txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCodigoCliente()));
@@ -140,6 +144,7 @@ public class ClienteVistaController implements Initializable {
         return listaClientes = FXCollections.observableList(lista);
     }
 
+    @FXML
     public void agregar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
@@ -190,6 +195,7 @@ public class ClienteVistaController implements Initializable {
         }
     }
 
+    @FXML
     public void eliminar() {
         switch (tipoDeOperaciones) {
             case ACTUALIZAR:
@@ -223,6 +229,7 @@ public class ClienteVistaController implements Initializable {
     }
 
     // LLEVA EL MISMO CONCEPTO QUE AGRAGAR Y ELIMINAR
+    @FXML
     public void editar() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
@@ -282,6 +289,31 @@ public class ClienteVistaController implements Initializable {
         }
     }
 
+    @FXML
+    public void reporte() {
+        switch (tipoDeOperaciones) {
+            case NINGUNO:
+                System.out.println("Hola mundo");
+                imprimirReporte();
+                break;
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditar.setText("Editar");
+                btnReportes.setText("Reportes");
+                btnAgregar.setDisable(false);
+                btnEliminar.setDisable(false);
+                tipoDeOperaciones = operaciones.NINGUNO;
+                break;
+ 
+        }
+    }
+    
+    public void imprimirReporte(){
+        Map parametros = new  HashMap();
+        parametros.put("codigoCliente", null);
+        GenerarReportes.mostrarReportes("ReportCLIENTES.jasper", "ReporteClientes", parametros);
+    }
     // METODOS PARA CONTROLAR DONDE SE INGRESA EL TEXTO
     public void desactivarControles() {
         txtClienteID.setEditable(false);

@@ -35,7 +35,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="btnReportes" layoutX="273.0" layoutY="465.0" mnemonicParsing="false" onAction="#editar" prefHeight="97.0" prefWidth="109.0" style="-fx-background-color: #FFF8ED;" text="Reportes">
+      <Button fx:id="btnReportes" layoutX="273.0" layoutY="465.0" mnemonicParsing="false" onAction="#reporte" prefHeight="97.0" prefWidth="109.0" style="-fx-background-color: #FFF8ED;" text="Reportes">
          <font>
             <Font size="20.0" />
          </font>
