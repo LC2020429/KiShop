@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import org.luiscordova.dao.Conexion;
 
 /**
@@ -23,6 +24,9 @@ public class GenerarReportes {
         try{
             JasperReport ReporteClientes2 =(JasperReport) JRLoader.loadObject(reporte);
             JasperPrint reporteImpreso = JasperFillManager.fillReport(ReporteClientes2, parametros, Conexion.getInstance().getConexion());
+            JasperViewer visor = new JasperViewer(reporteImpreso,false);
+            visor.setTitle(titulo);
+            visor.setVisible(true);
         }catch(Exception e){
             e.printStackTrace();
         }

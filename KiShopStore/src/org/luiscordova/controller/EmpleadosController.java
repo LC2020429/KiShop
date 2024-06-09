@@ -128,7 +128,7 @@ public class EmpleadosController implements Initializable {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }   
 
     public CargoEmpleado buscarCodigoEmp(int codigoEmpleado) {
         CargoEmpleado resultado = null;
@@ -296,7 +296,7 @@ public class EmpleadosController implements Initializable {
         }
     }
 
-           public void eliminar() {
+    public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
                 desactivarControles();
@@ -328,7 +328,7 @@ public class EmpleadosController implements Initializable {
                 }
         }
     }
-           
+
     public void reporte() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
@@ -360,7 +360,7 @@ public class EmpleadosController implements Initializable {
         txtDireccion.setEditable(true);
         txtTurno.setEditable(true);
         cmbCodigoCargoEmpleado.setDisable(false);
-    }
+    }   
 
     public void limpiarControles() {
         txtCtxtCodigoEmpleadoodo.clear();

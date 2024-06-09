@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/controller/TipoProductoVistaController.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/dao/Conexion.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/report/GenerarReportes.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/bean/Clientes.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/controller/ClienteVistaController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/bean/CargoEmpleado.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/controller/EmpleadosController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/bean/Empleados.java</file>
         </group>
     </open-files>
 </project-private>

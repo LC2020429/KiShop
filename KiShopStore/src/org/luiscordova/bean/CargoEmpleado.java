@@ -51,6 +51,5 @@ public class CargoEmpleado {
     public String toString() {
         return  codigoCargoEmpleado + "  || Cargo: " + nombreCargo;
     }
-
     
 }

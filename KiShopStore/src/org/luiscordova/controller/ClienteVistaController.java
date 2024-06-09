@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package org.luiscordova.controller;
 
 /**
@@ -112,6 +108,7 @@ public class ClienteVistaController implements Initializable {
     @FXML
     public void seleccionarElmento() {
         // castear es convertir datos 
+        try{
         txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCodigoCliente()));
         txtNIT.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNITCliente()));
         txtNombreCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNombresCliente()));
@@ -119,6 +116,9 @@ public class ClienteVistaController implements Initializable {
         txtDireccionCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getDireccionCliente()));
         txtTelefonoCli.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getTelefonoCliente()));
         txtCorreoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCorreoCliente()));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
@@ -293,7 +293,6 @@ public class ClienteVistaController implements Initializable {
     public void reporte() {
         switch (tipoDeOperaciones) {
             case NINGUNO:
-                System.out.println("Hola mundo");
                 imprimirReporte();
                 break;
             case ACTUALIZAR:
@@ -312,7 +311,7 @@ public class ClienteVistaController implements Initializable {
     public void imprimirReporte(){
         Map parametros = new  HashMap();
         parametros.put("codigoCliente", null);
-        GenerarReportes.mostrarReportes("ReportCLIENTES.jasper", "ReporteClientes", parametros);
+        GenerarReportes.mostrarReportes("ReportCLIENTES.jasper", "Reporte de Clientes", parametros);
     }
     // METODOS PARA CONTROLAR DONDE SE INGRESA EL TEXTO
     public void desactivarControles() {

@@ -5,8 +5,6 @@ SET GLOBAL time_zone = '-06:00';
 -- ALTER USER '2020429_IN5BM'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY 'abc123**';
 -- flush privileges;
 
-
-
 CREATE TABLE TipoProducto (
     codigoTipoProducto INT,
     descripcion VARCHAR(45),
