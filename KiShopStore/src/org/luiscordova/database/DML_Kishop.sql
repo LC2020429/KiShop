@@ -780,3 +780,11 @@ END $$
 DELIMITER ;
 
 CALL GetEmployeeInfo();
+
+
+select * from detalleFactura 
+	inner join Factura on detallefactura.numeroFactura = factura.numeroFactura
+    inner join clientes on factura.codigoCliente = clientes.codigoCliente
+    inner join productos on detallefactura.codigoProducto = productos.codigoProducto
+    where factura.numeroFactura = 1001;
+

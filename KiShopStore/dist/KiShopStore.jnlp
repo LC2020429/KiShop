@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="KiShopStore.jar" size="1144804" download="eager" />
+    <jar href="KiShopStore.jar" size="1145496" download="eager" />
     <jar href="lib\c3p0-0.9.1-pre6.jar" size="531005" download="eager" />
     <jar href="lib\commons-collections-3.2.1.jar" size="575389" download="eager" />
     <jar href="lib\commons-digester-2.1.jar" size="196768" download="eager" />
@@ -24,6 +24,9 @@
     <jar href="lib\schudt-javafx-datepicker-0.0.2.jar" size="67087" download="eager" />
     <jar href="lib\slf4j-api-1.6.1.jar" size="25496" download="eager" />
   </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="KiShopStore" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
   <jfx:javafx-desc  width="800" height="600" main-class="org.luiscordova.system.Main"  name="KiShopStore" />
   <update check="always"/>
 </jnlp>

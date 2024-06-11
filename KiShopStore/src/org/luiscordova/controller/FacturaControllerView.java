@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import org.luiscordova.bean.Clientes;
 import org.luiscordova.bean.Empleados;
 import org.luiscordova.bean.Factura;
 import org.luiscordova.dao.Conexion;
+import org.luiscordova.report.GenerarReportes;
 import org.luiscordova.system.Main;
 
 public class FacturaControllerView implements Initializable {
@@ -366,6 +369,30 @@ public class FacturaControllerView implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void reporte() {
+        switch (tipoDeOperador) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditar.setText("Editar");
+                btnReportes.setText("Reportes");
+                btnAgregar.setDisable(false);
+                btnEliminar.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+                break;
+
+        }
+    }
+    
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        int facID = Integer.valueOf((Factura)tvFactura.getSelectionModel().getSelectedItem().getNumeroFactura());
+        parametros.put(facID, facID);
+        GenerarReportes.mostrarReportes("ReportFactura2.jasper", "Factura", parametros);
     }
 
     public void desactivarControles() {
