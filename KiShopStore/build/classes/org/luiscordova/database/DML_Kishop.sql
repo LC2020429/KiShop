@@ -267,7 +267,7 @@ CALL sp_AgregarCliente(1, '1234567890', 'Juan', 'Perez', 'Calle 123', '12345678'
 CALL sp_AgregarCliente(2, '9876543210', 'Maria', 'Gomez', 'Avenida 456', '87654321', 'maria@example.com');
 CALL sp_AgregarCliente(3, '6543210987', 'Pedro', 'Lopez', 'Carrera 789', '45678901', 'pedro@example.com');
 CALL sp_AgregarCliente(4, '0123456789', 'Laura', 'Torres', 'Calle 456', '89012345', 'laura@example.com');
-CALL sp_AgregarCliente(5, '9876543210', 'Carlos', 'Garcia', 'Avenida 789', '67890123', 'carlos@example.com');
+CALL sp_AgregarCliente(5, '9876543200', 'Carlos', 'Garcia', 'Avenida 789', '67890123', 'carlos@example.com');
 
 -- COMPRAS
 -- Agregar
@@ -742,3 +742,41 @@ DELIMITER ;
 CALL sp_AgregarDetalleFactura(1, 9.99, 3, 1001, 'P001');
 CALL sp_AgregarDetalleFactura(2, 12.5, 2, 1002, 'P002');
 CALL sp_AgregarDetalleFactura(3, 15.75, 4, 1003, 'P003');
+
+-- Reportes
+DELIMITER $$
+CREATE PROCEDURE GetProviderProductInfo()
+BEGIN
+    SELECT 
+        P.NITProveedor,
+        P.paginaWeb,
+        P.contactoPrincipal,
+        PR.codigoProducto,
+        PR.descripcionProducto
+    FROM 
+        Proveedores P
+    LEFT JOIN 
+        Productos PR ON P.codigoProveedor = PR.codigoProveedor;
+END $$
+DELIMITER ;
+CALL GetProviderProductInfo();
+
+DELIMITER $$
+CREATE PROCEDURE GetEmployeeInfo()
+BEGIN
+    SELECT 
+        e.codigoEmpleado,
+        e.apellidosEmpleado,
+        e.sueldo, 
+        e.turno,
+        c.nombreCargo
+    FROM 
+        Empleados e
+    JOIN 
+        CargoEmpleado c ON e.codigoCargoEmpleado = c.codigoCargoEmpleado
+    ORDER BY 
+        e.sueldo DESC;
+END $$
+DELIMITER ;
+
+CALL GetEmployeeInfo();

@@ -8,6 +8,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
 import org.luiscordova.bean.Proveedores;
 import org.luiscordova.dao.Conexion;
+import org.luiscordova.report.GenerarReportes;
 import org.luiscordova.system.Main;
 
 /**
@@ -284,7 +287,32 @@ public class ProveedorVistaController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+@FXML
+    public void reporte() {
+        switch (tipoDeOperaciones) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditarProveedor.setText("Editar");
+                btnReportesProveedor.setText("Reportes");
+                btnAgregarProveedor.setDisable(false);
+                btnEliminarProveedor.setDisable(false);
+                tipoDeOperaciones = operaciones.NINGUNO;
+                break;
 
+        }
+    }
+
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("codigoProveedor", null);
+        GenerarReportes.mostrarReportes("ReportProveedores.jasper", "Reporte de Proveedores", parametros);
+    }
+    
     // METODOS PARA CONTROLAR DONDE SE INGRESA EL TEXTO
     public void desactivarControles() {
         txtcodigoProveedor.setEditable(false);

@@ -4,6 +4,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,7 @@ import javax.swing.JOptionPane;
 import org.luiscordova.bean.CargoEmpleado;
 import org.luiscordova.bean.Empleados;
 import org.luiscordova.dao.Conexion;
+import org.luiscordova.report.GenerarReportes;
 import org.luiscordova.system.Main;
 
 public class EmpleadosController implements Initializable {
@@ -331,6 +334,9 @@ public class EmpleadosController implements Initializable {
 
     public void reporte() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -339,7 +345,15 @@ public class EmpleadosController implements Initializable {
                 btnAgregar.setDisable(false);
                 btnEliminar.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
+                break;
+
         }
+    }
+
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("codigoEmpleado", null);
+        GenerarReportes.mostrarReportes("ReportEmpleados.jasper", "Reporte de Empleados", parametros);
     }
 
     public void desactivarControles() {

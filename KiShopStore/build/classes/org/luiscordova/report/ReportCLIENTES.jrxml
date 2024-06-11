@@ -52,11 +52,11 @@
 				<textFieldExpression><![CDATA[$F{apellidosCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="177" y="0" width="100" height="20" uuid="15086838-27b1-4850-afa0-46d2819bf955"/>
+				<reportElement x="189" y="0" width="100" height="20" uuid="15086838-27b1-4850-afa0-46d2819bf955"/>
 				<textFieldExpression><![CDATA[$F{NITCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="289" y="0" width="100" height="20" uuid="dd4b0147-c60a-427e-8522-c317907986a8"/>
+				<reportElement x="275" y="0" width="100" height="20" uuid="dd4b0147-c60a-427e-8522-c317907986a8"/>
 				<textFieldExpression><![CDATA[$F{correoCliente}]]></textFieldExpression>
 			</textField>
 			<textField>

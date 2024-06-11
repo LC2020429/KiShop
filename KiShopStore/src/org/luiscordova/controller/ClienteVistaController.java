@@ -108,15 +108,15 @@ public class ClienteVistaController implements Initializable {
     @FXML
     public void seleccionarElmento() {
         // castear es convertir datos 
-        try{
-        txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCodigoCliente()));
-        txtNIT.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNITCliente()));
-        txtNombreCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNombresCliente()));
-        txtApellidoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getApellidosCliente()));
-        txtDireccionCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getDireccionCliente()));
-        txtTelefonoCli.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getTelefonoCliente()));
-        txtCorreoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCorreoCliente()));
-        }catch(Exception e){
+        try {
+            txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCodigoCliente()));
+            txtNIT.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNITCliente()));
+            txtNombreCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNombresCliente()));
+            txtApellidoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getApellidosCliente()));
+            txtDireccionCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getDireccionCliente()));
+            txtTelefonoCli.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getTelefonoCliente()));
+            txtCorreoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCorreoCliente()));
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -172,14 +172,21 @@ public class ClienteVistaController implements Initializable {
     public void guardar() {
         Clientes registro = new Clientes();
         registro.setCodigoCliente(Integer.parseInt(txtClienteID.getText()));
+
+        // Validar si el código de cliente ya existe
+        if (existeCodigoCliente(registro.getCodigoCliente())) {
+            JOptionPane.showMessageDialog(null, "El código de cliente ya existe. Por favor, ingrese uno nuevo.");
+            return; // Detener el proceso de guardado
+        }
+
         registro.setNITCliente(txtNIT.getText());
         registro.setNombresCliente(txtNombreCliente.getText());
         registro.setApellidosCliente(txtApellidoCliente.getText());
         registro.setDireccionCliente(txtDireccionCliente.getText());
         registro.setTelefonoCliente(txtTelefonoCli.getText());
         registro.setCorreoCliente(txtCorreoCliente.getText());
+
         try {
-            // se usa procedimiento por ser local y solo permite una conexion
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_AgregarCliente(?, ?, ?, ?, ?, ?, ?)}");
             procedimiento.setInt(1, registro.getCodigoCliente());
             procedimiento.setString(2, registro.getNITCliente());
@@ -190,9 +197,22 @@ public class ClienteVistaController implements Initializable {
             procedimiento.setString(7, registro.getCorreoCliente());
             procedimiento.execute();
             listaClientes.add(registro);
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+
+            JOptionPane.showMessageDialog(null, "No puede haber dos clientes con el mismo nit");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean existeCodigoCliente(int codigoCliente) {
+        for (Clientes cliente : listaClientes) {
+            if (cliente.getCodigoCliente() == codigoCliente) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @FXML
@@ -304,12 +324,12 @@ public class ClienteVistaController implements Initializable {
                 btnEliminar.setDisable(false);
                 tipoDeOperaciones = operaciones.NINGUNO;
                 break;
- 
+
         }
     }
-    
-    public void imprimirReporte(){
-        Map parametros = new  HashMap();
+
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
         parametros.put("codigoCliente", null);
         GenerarReportes.mostrarReportes("ReportCLIENTES.jasper", "Reporte de Clientes", parametros);
     }

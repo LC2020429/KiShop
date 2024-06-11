@@ -1,4 +1,0 @@
--- Proveedores
--- agregar
-
-use DBKiShop;
