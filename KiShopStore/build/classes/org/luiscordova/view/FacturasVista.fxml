@@ -26,10 +26,10 @@
       <TableView fx:id="tvFactura" layoutX="387.0" layoutY="278.0" onMouseClicked="#seleccionarElemento" prefHeight="283.0" prefWidth="628.0">
          <columns>
             <TableColumn fx:id="colNumeroFactura" minWidth="87.0" prefWidth="87.0" text="Numero" />
-            <TableColumn fx:id="colFecha" minWidth="104.0" prefWidth="105.0" text="Estado" />
-            <TableColumn fx:id="colEstado" minWidth="104.0" prefWidth="108.0" text="Total" />
-            <TableColumn fx:id="colCliente" minWidth="99.0" prefWidth="99.0" text="Fecha" />
-            <TableColumn fx:id="colTotal" minWidth="104.0" prefWidth="121.0" text="Cliente" />
+            <TableColumn fx:id="colFecha" minWidth="104.0" prefWidth="105.0" text="Fecha" />
+            <TableColumn fx:id="colEstado" minWidth="104.0" prefWidth="108.0" text="Estado" />
+            <TableColumn fx:id="colCliente" minWidth="99.0" prefWidth="99.0" text="Cliente" />
+            <TableColumn fx:id="colTotal" minWidth="104.0" prefWidth="121.0" text="Total" />
             <TableColumn fx:id="colEmpleado" minWidth="104.0" prefWidth="107.0" text="Empleado" />
          </columns>
          <stylesheets>

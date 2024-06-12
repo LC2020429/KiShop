@@ -1,10 +1,8 @@
 package org.luiscordova.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,26 +95,32 @@ public class FacturaControllerView implements Initializable {
     public void cargarDatos() {
         tvFactura.setItems(getFactura());
         colNumeroFactura.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("numeroFactura"));
-        colFecha.setCellValueFactory(new PropertyValueFactory<Factura, String>("estado"));
-        colEstado.setCellValueFactory(new PropertyValueFactory<Factura, Double>("totalFactura"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<Factura, String>("fechaFasctura"));
-        colTotal.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("codigoCliente"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<Factura, String>("estado"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<Factura, Double>("totalFactura"));
+        colFecha.setCellValueFactory(new PropertyValueFactory<Factura, String>("fechaFactura"));
+        colCliente.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("codigoCliente"));
         colEmpleado.setCellValueFactory(new PropertyValueFactory<Factura, Integer>("codigoEmpleado"));
     }
 
     public void seleccionarElemento() {
         try {
-            Factura compraSeleccionada = (Factura) tvFactura.getSelectionModel().getSelectedItem();
-            txtNumeroFactura.setText(String.valueOf(compraSeleccionada.getNumeroFactura()));
-            txtEstadoF.setText(String.valueOf(compraSeleccionada.getEstado()));
-            txtTotalF.setText(String.valueOf(compraSeleccionada.getTotalFactura()));
-            cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(compraSeleccionada.getCodigoEmpleado()));
-            cmbCliente.getSelectionModel().select(buscaCodigoCliente(compraSeleccionada.getCodigoCliente()));
+            Factura facturaSeleccionada = (Factura) tvFactura.getSelectionModel().getSelectedItem();
 
-            String fechaCompra = compraSeleccionada.getFechaFactura();
-            LocalDate fechaComprar = LocalDate.parse(fechaCompra);
+            txtNumeroFactura.setText(String.valueOf(facturaSeleccionada.getNumeroFactura()));
+            txtEstadoF.setText(String.valueOf(facturaSeleccionada.getEstado()));
+            txtTotalF.setText(String.valueOf(facturaSeleccionada.getTotalFactura()));
 
-            dpFecha.setValue(fechaComprar);
+            String fechaFactura = facturaSeleccionada.getFechaFactura();
+            LocalDate fechaFacturaLocal = LocalDate.parse(fechaFactura);
+            dpFecha.setValue(fechaFacturaLocal);
+
+            // Seleccionar el empleado en el ComboBox
+            int codigoEmpleado = facturaSeleccionada.getCodigoEmpleado();
+            cmbEmpleado.getSelectionModel().select(buscarCodigoEmp(codigoEmpleado));
+
+            // Seleccionar el cliente en el ComboBox
+            int codigoCliente = facturaSeleccionada.getCodigoCliente();
+            cmbCliente.getSelectionModel().select(buscaCodigoCliente(codigoCliente));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -230,7 +234,8 @@ public class FacturaControllerView implements Initializable {
         }
         return listaEmpleados = FXCollections.observableList(listaEmp);
     }
-
+    
+   @FXML
     public void agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -250,9 +255,8 @@ public class FacturaControllerView implements Initializable {
                 btnEditar.setDisable(false);
                 btnReportes.setDisable(false);
                 /*regresar de nuevo a sus imagenes originales
-                imgAgregar.setImage(new Image("URL"));*/
+            imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
                 break;
         }
     }
