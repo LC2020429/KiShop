@@ -1,5 +1,6 @@
 package org.luiscordova.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -370,6 +371,7 @@ public class FacturaControllerView implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void reporte() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -387,12 +389,17 @@ public class FacturaControllerView implements Initializable {
 
         }
     }
-    
+
     public void imprimirReporte() {
-        Map parametros = new HashMap();
-        int facID = Integer.valueOf((Factura)tvFactura.getSelectionModel().getSelectedItem().getNumeroFactura());
-        parametros.put(facID, facID);
-        GenerarReportes.mostrarReportes("ReportFactura2.jasper", "Factura", parametros);
+        Factura selectedInvoice = (Factura) tvFactura.getSelectionModel().getSelectedItem();
+        if (selectedInvoice == null) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una factura antes de imprimir el reporte.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Map<String, Object> parametros = new HashMap<>();
+            int facID = selectedInvoice.getNumeroFactura();
+            parametros.put("facID", facID);
+            GenerarReportes.mostrarReportes("ReportFactura.jasper", "Factura", parametros);
+        }
     }
 
     public void desactivarControles() {

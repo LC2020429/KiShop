@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/controller/FacturaControllerView.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/dao/Conexion.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/2020429/KiShop/KiShopStore/src/org/luiscordova/controller/ClienteVistaController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/controller/FacturaControllerView.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/controller/ProveedorVistaController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/controller/EmpleadosController.java</file>
+            <file>file:/C:/Users/Computadora/Desktop/KiShop/KiShop/KiShopStore/src/org/luiscordova/controller/ClienteVistaController.java</file>
         </group>
     </open-files>
 </project-private>

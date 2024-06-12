@@ -781,10 +781,15 @@ DELIMITER ;
 
 CALL GetEmployeeInfo();
 
+DELIMITER $$
 
-select * from detalleFactura 
-	inner join Factura on detallefactura.numeroFactura = factura.numeroFactura
-    inner join clientes on factura.codigoCliente = clientes.codigoCliente
-    inner join productos on detallefactura.codigoProducto = productos.codigoProducto
-    where factura.numeroFactura = 1001;
+    SELECT 
+        *
+    FROM 
+        detalleFactura df
+        INNER JOIN Factura f ON df.numeroFactura = f.numeroFactura
+        INNER JOIN clientes c ON f.codigoCliente = c.codigoCliente
+        INNER JOIN productos p ON df.codigoProducto = p.codigoProducto
+    WHERE 
+        f.numeroFactura = 1002;
 
